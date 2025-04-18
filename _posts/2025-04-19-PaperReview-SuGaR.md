@@ -21,6 +21,7 @@ last_modified_at: 2025-04-19 # 최종 수정 날짜
 [2024 CVPR] 
 
 기존 Gaussian Splatting은 사실적인 뷰 합성에는 뛰어나지만, Gaussian들이 정렬되지 않아 mesh로의 변환이 어렵다는 한계를 갖는다. 본 논문은 3D Gaussian Splatting으로부터 빠르고 고품질의 Mesh를 추출하는 방법인 SuGaR를 제안한다.
+
 [SuGaR: Surface-Aligned Gaussian Splatting for Efficient 3D Mesh...](https://arxiv.org/abs/2311.12775)
 
 > SuGaR는 3D Gaussian Splatting으로부터 빠르고 정확하게 editable한 mesh를 추출하고, 이를 기반으로 고품질 렌더링과 직관적인 3D 장면 편집을 가능하게 하는 방법론을 제시한다. 
