@@ -19,7 +19,7 @@ main:
 # 2022.02.15 sidebar update : simple ver.
 categories:
   - title: "Algorithms"
-    url: /categories/categories1/
+    url: /categories/Algorithms/
   - title: "Machine Learning"
     url: /categories/categories2/
   - title: "3D Graphics"
