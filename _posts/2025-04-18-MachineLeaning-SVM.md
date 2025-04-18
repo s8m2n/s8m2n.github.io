@@ -12,7 +12,7 @@ permalink: /MachineLearning/SVM/
 toc: true
 toc_sticky: true
 
-date: 2025-04-12
+date: 2025-04-18
 last_modified_at: 2025-04-19
 ---
 
