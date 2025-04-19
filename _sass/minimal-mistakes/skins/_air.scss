@@ -1,3 +1,27 @@
+// /* ==========================================================================
+//    Air skin
+//    ========================================================================== */
+
+// /* Colors */
+// $background-color: #eeeeee !default;
+// $text-color: #222831 !default;
+// $muted-text-color: #393e46 !default;
+// $primary-color: #0092ca !default;
+// $border-color: mix(#fff, #393e46, 75%) !default;
+// $footer-background-color: $primary-color !default;
+// $link-color: #393e46 !default;
+// $masthead-link-color: $text-color !default;
+// $masthead-link-color-hover: $text-color !default;
+// $navicon-link-color-hover: mix(#fff, $text-color, 80%) !default;
+
+// .page__footer {
+//   color: #fff !important; // override
+// }
+
+// .page__footer-follow .social-icons .svg-inline--fa {
+//   color: inherit;
+// }
+
 /* ==========================================================================
    Air skin
    ========================================================================== */
@@ -7,17 +31,83 @@ $background-color: #eeeeee !default;
 $text-color: #222831 !default;
 $muted-text-color: #393e46 !default;
 $primary-color: #0092ca !default;
+
 $border-color: mix(#fff, #393e46, 75%) !default;
+$code-background-color: rgba(240, 240, 240, 0.5) !default;
+$code-background-color-dark: rgba(185, 185, 185, 0.25) !default;
+
+$mark-highlight-color: rgba($primary-color, 0.15) !default;
+$block-quote-background-color: rgba($primary-color, 0.1) !default;
+$form-background-color: rgba(255, 255, 255, 0.527) !default;
 $footer-background-color: $primary-color !default;
 $link-color: #393e46 !default;
+
+$link-color-hover: mix($primary-color, $background-color, 70%) !default;
+$link-color-visited: mix($link-color, #000, 98%) !default;
+
 $masthead-link-color: $text-color !default;
 $masthead-link-color-hover: $text-color !default;
 $navicon-link-color-hover: mix(#fff, $text-color, 80%) !default;
 
-.page__footer {
-  color: #fff !important; // override
-}
+$active-color: mix($primary-color, $background-color, 5%) !default;
 
+/* YIQ color contrast */
+$yiq-contrasted-dark-default: $text-color !default;
+$yiq-contrasted-light-default: #fff !default;
+$yiq-contrasted-threshold: 175 !default;
+$yiq-debug: false !default;
+
+/* Air syntax highlighting (base16 예시) */
+$base00: #eeeeee !default;
+$base01: #d6d6d6 !default;
+$base02: #cccccc !default;
+$base03: #b0b0b0 !default;
+$base04: #000000 !default;
+$base05: #101010 !default;
+$base06: #151515 !default;
+$base07: #202020 !default;
+$base08: #ff5722 !default;
+$base09: #ff9800 !default;
+$base0a: #ffc107 !default;
+$base0b: #4caf50 !default;
+$base0c: #00bcd4 !default;
+$base0d: #2196f3 !default;
+$base0e: #9c27b0 !default;
+$base0f: #795548 !default;
+
+/* Author URL and social icons */
+.author__urls.social-icons i,
+.author__urls.social-icons .svg-inline--fa,
+.page__footer-follow .social-icons i,
 .page__footer-follow .social-icons .svg-inline--fa {
   color: inherit;
+}
+
+/* Content links */
+.page__content {
+  a,
+  a:visited {
+    color: inherit;
+  }
+}
+
+/* next/previous buttons */
+.pagination--pager {
+  color: $text-color;
+  background-color: rgba($primary-color, 0.8);
+  border-color: transparent;
+
+  &:visited {
+    color: $text-color;
+  }
+}
+
+/* Search box */
+.ais-search-box .ais-search-box--input {
+  background-color: $form-background-color;
+}
+
+/* Footer specific style */
+.page__footer {
+  color: #fff !important; // override
 }
