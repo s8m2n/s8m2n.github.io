@@ -29,9 +29,8 @@ last_modified_at: 2025-04-19
 
 ![large_margine_classification](/assets/images/posts_img/SVM/large_margin_classification.png)
 
-> **NOTE** 
-> 이처럼 SVM 분류기는 클래스 사이에 가장 폭이 넓은, 즉 **margin이 큰 도로를 찾는 것**으로 생각할 수 있다. 
-> 그래서 SVM을 Large Margin Classification 이라고도 한다. 
+이처럼 SVM 분류기는 클래스 사이에 가장 폭이 넓은, 즉 **margin이 큰 도로를 찾는 것**으로 생각할 수 있다. 
+그래서 SVM을 Large Margin Classification 이라고도 한다. 
 
 오른쪽 그림처럼 결정된 경계의 바깥쪽에 샘플을 추가해도 결정 경계에는 영향이 없다.\
 즉 결정 경계는 경계에 위치한 샘플에 의해 전적으로 결정된다. 이런 샘플을 **서포트 벡터**라고 부른다.\
