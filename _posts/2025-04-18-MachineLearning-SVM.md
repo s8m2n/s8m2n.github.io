@@ -36,8 +36,9 @@ last_modified_at: 2025-04-19
 (오른쪽 그림의 동그라미로 표시된다)
 
 <div class="notice--info" markdown="1">
-SVM의 특성은 scale에 민감하다. 왼쪽 그래프는 수직축의 스케일이 가로축보다 훨씬 커서 margin이 작아진다.
-오른쪽 그림처럼 특성의 스케일을 조정하면 결정 경계를 훨씬 좋게 설정할 수 있다.
+  #### NOTE
+  SVM의 특성은 scale에 민감하다. 왼쪽 그래프는 수직축의 스케일이 가로축보다 훨씬 커서 margin이 작아진다.
+  오른쪽 그림처럼 특성의 스케일을 조정하면 결정 경계를 훨씬 좋게 설정할 수 있다.
 </div>
 
 ![sensitivity_to_feature_scales.png](/assets/images/posts_img/SVM/sensitivity_to_feature_scales.png)
