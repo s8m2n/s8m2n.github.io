@@ -43,7 +43,7 @@ last_modified_at: 2025-04-19
 
 ![sensitivity_to_feature_scales.png](/assets/images/posts_img/SVM/sensitivity_to_feature_scales.png)
 
-### Hard & Soft Margin 분류
+### Hard & Soft Margin 
 다시 위의 예시로 돌아가보자. 처음 SVM 그래프처럼 모든 샘플이 도로 바깥쪽에 분류되어 있다면 이를 **하드 마진 분류** 라고 한다.\
 하지만 하드마진분류에는 두가지 문제점이 있다.
 1. 데이터가 선형적으로 구분될 수 있어야 올바르게 동작한다. 
