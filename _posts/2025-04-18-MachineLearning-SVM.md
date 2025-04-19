@@ -20,6 +20,7 @@ last_modified_at: 2025-04-19
 기계학습 분야 중 하나로 패턴인식, 자료분석을 위한 지도학습 모델분류와 회귀분석을 위해 사용한다.\
 선형이나 비선형 분류, 회귀, 이상치 탐색에도 사용가능한 다목적 머신러닝 모델이다.\
 이번 포스팅에서는 SVM에 대해 알아보자[^1].
+
 [^1]: 본 포스팅은 핸즈온 머신 러닝2판을 참고했습니다
 
 ## 선형 SVM 분류
@@ -37,7 +38,7 @@ last_modified_at: 2025-04-19
 (오른쪽 그림의 동그라미로 표시된다)
 
 > [!CAUTION]
-> SVM의 특성은 scale에 민감하다. 왼쪽 그래프는 수직축의 스케일이 가로축보다 훨씬 커서 margin이 작아진다.\
+> SVM의 특성은 scale에 민감하다. 왼쪽 그래프는 수직축의 스케일이 가로축보다 훨씬 커서 margin이 작아진다.
 > 오른쪽 그림처럼 특성의 스케일을 조정하면 결정 경계를 훨씬 좋게 설정할 수 있다.
 
 ![sensitivity_to_feature_scales.png](/assets/images/posts_img/SVM/sensitivity_to_feature_scales.png)
@@ -53,7 +54,7 @@ last_modified_at: 2025-04-19
 
 ![sensitivity_to_outliers.png](/assets/images/posts_img/SVM/sensitivity_to_outliers.png)
 
-이처럼 왼쪽 그래프에서는 이상치로 인해 하드마진을 찾을 수 없다. 오른쪽 그래프 역시 이상치에 너무 민감하게 반응하여 결정경계의 일반화가 잘 되지 않아보인다.\
+이처럼 왼쪽 그래프에서는 이상치로 인해 하드마진을 찾을 수 없다. 오른쪽 그래프 역시 이상치에 너무 민감하게 반응하여 결정경계의 일반화가 잘 되지 않아보인다.
 
 이런 문제를 해결하기 위해서 조금 *더 유연한 모델*이 필요하다.
 * Margin을 가능한 넓게 유지하는 것과
@@ -74,7 +75,7 @@ last_modified_at: 2025-04-19
 
 등이 있다.
 
-우선 다항식 특성을 추가해서 선형적으로 구분되는 데이터를 만드는 간단한 예시를 보자.\
+우선 다항식 특성을 추가해서 선형적으로 구분되는 데이터를 만드는 간단한 예시를 보자.
 ![higher_dimensions.png](/assets/images/posts_img/SVM/higher_dimensions.png)
 
 왼쪽 그림 하나의 특성 $x_1$을 가지는 데이터셋으로 선형적으로 구분이 안된다.\
