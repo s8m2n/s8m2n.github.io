@@ -26,5 +26,28 @@
    src: url(/assets/css/fonts/RIDIBatang.otf);
 }
 
+/* NOTE 블록 스타일 */
+blockquote p {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+blockquote p::before {
+  content: "💡 NOTE";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: bold;
+  color: #ff6600;
+}
+
+/* 블록 인식용 추가 스타일 */
+blockquote {
+  background-color: #fff7f0;
+  border-left: 5px solid #ff6600;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
 
    
