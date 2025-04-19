@@ -40,7 +40,8 @@ NeRF 이후 3D 장면의 새로운 시점을 합성하는 방식으로 **3D Gaus
    
 DreamGaussian의 LDQ 방식은 3D 공간을 균등한 voxel grid로 분할하고, 각 cell에서 밀도를 계산해 Pruning한 뒤 Marching Cubes를 적용한다. 이 방식은 Gaussian이 표면에 정렬되어 있지 않기 때문에 생성된 mesh는 불규칙하고 거친 polygonal surface가 되며 부드럽고 일관된 표면을 표현하는 데 한계가 있다.
 
-반면 SuGaR는 Gaussian을 표면에 정렬시키는 정규화 기법을 먼저 도입하고 시각적으로 의미 있는 밀도 구간만을 샘플링한 후 Poisson Reconstruction을 적용함으로써 더 정돈된 triangle mesh를 추출할 수 있다. 또한 추출된 mesh에 Gaussian을 바인딩하고 함께 최적화함으로써 표면의 텍스처와 형상 표현을 동시에 개선한다.
+반면 SuGaR는 Gaussian을 표면에 정렬시키는 정규화 기법을 먼저 도입하고 시각적으로 의미 있는 밀도 구간만을 샘플링한 후 Poisson Reconstruction을 적용함으로써 더 정돈된 triangle mesh를 추출할 수 있다.\
+또한 추출된 mesh에 Gaussian을 바인딩하고 함께 최적화함으로써 표면의 텍스처와 형상 표현을 동시에 개선한다.\
 ✅결과적으로 SuGaR의 mesh는 LDQ 방식보다 **구조적으로 정돈**되어 있으며(scalable and structured triangle mesh), **후속 편집 및 렌더링 응용에도 바로 활용 가능**하다.
 
 📌**SuGaR는 Gaussian이 표면에 정렬되도록 유도하는 Regularization Term을 도입하고, 이후 Mesh를 효율적으로 추출 및 최적화하는 파이프라인을 제안**한다.
@@ -84,14 +85,14 @@ DreamGaussian의 LDQ 방식은 3D 공간을 균등한 voxel grid로 분할하고
     
    각 3D Gaussian g는 다음의 속성으로 구성됨:
     
-   -   위치 $\mu_g \in \mathbb{R}^3$
-   -   공분산 $\Sigma_g \in \mathbb{R}^{3 \times 3}$: 스케일과 방향성을 표현
-   -   색상 $c_g \in \mathbb{R}^3$
-   -   투명도 $\alpha_g \in [0, 1]$
+   -   위치 $$\mu_g \in \mathbb{R}^3$$
+   -   공분산 $$\Sigma_g \in \mathbb{R}^{3 \times 3}$$: 스케일과 방향성을 표현
+   -   색상 $$c_g \in \mathbb{R}^3$$
+   -   투명도 $$\alpha_g \in [0, 1]$$
     
    렌더링은 이 Gaussian들을 화면에 **splatting (뿌리는)** 방식으로 진행되며, 렌더링 식은 다음과 같이 주어진다:
     
-   $I(x) = \sum_g \alpha_g \cdot c_g \cdot \exp\left( -\frac{1}{2} (x - \mu_g)^T \Sigma_g^{-1} (x - \mu_g) \right)$
+   $$I(x) = \sum_g \alpha_g \cdot c_g \cdot \exp\left( -\frac{1}{2} (x - \mu_g)^T \Sigma_g^{-1} (x - \mu_g) \right)$$
     
    이때, 카메라 시점에서 가까운 Gaussian이 우선적으로 그려지고, 알파 블렌딩을 통해 여러 개가 겹쳐질 수 있다.
     
