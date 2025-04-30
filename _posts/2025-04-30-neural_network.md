@@ -23,7 +23,6 @@ math: true
 단순한 Perceptron은 아래 그림처럼 입력 신호 $x_1, x_2$를 입력으로 받고 y를 출력한다. 이를 식으로 나타내면 [식3.1]과 같다.
 
 ![fig3-2](/assets/img/neural_network/fig3-2.png){: width="400" height="300"}
-_fig3-2_
 
 $$
 y = \begin{cases}
@@ -31,7 +30,7 @@ y = \begin{cases}
 1 & \text{if } b + w_1 x_1 + w_2 x_2 > 0
 \end{cases}
 $$
-_[식3.1]_
+[식3.1]
 
 $b$는 Bias를 나타내는 매개변수로 뉴런이 얼마나 쉽게 활성화되는지 그 기준을 설정한다. $w_1, w_2$는 각 신호의 가중치를 나타내는 매개변수로 각 신호의 영향력을 제어한다. 
 
@@ -46,7 +45,7 @@ $b$는 Bias를 나타내는 매개변수로 뉴런이 얼마나 쉽게 활성화
 $$
 y = h(b + w_1 x_1 + w_2 x_2) 
 $$ 
-_[식3.2]_
+[식3.2]
 
 
 $$
@@ -55,7 +54,7 @@ h(x) = \begin{cases}
 1 & \text{if } x > 0
 \end{cases}
 $$
-_[식3.3]_
+[식3.3]
 
 입력 신호와 가중치를 곱하여 얻은 값은 $h(x)$라는 함수를 통과하고, $h(x)$ 함수는 입력이 0을 넘으면 1, 0을 안넘으면 0을 반환한다.
 
@@ -77,11 +76,11 @@ _[식3.3]_
 
 [식3.3]에서 사용하는 활성화 함수는 가장 간단한 Step Function을 사용한다. 
 
-'''
+```
 def step_function(x):
     y=x>0
     return y.astype(np.int)
-'''
+```
 
 ![fig3-6](/assets/img/neural_network/fig3-6.png){: width="400" height="300"}
 
@@ -94,14 +93,14 @@ def step_function(x):
 $$
 h(x) = \frac{1}{1 + \exp(-x)}
 $$
-_[식3.6]_
+[식3.6]
 
 sigmoid 함수는 입력을 넣으면 0~1에 해당하는 값을 반환하는 함수이다. 
 
-'''
+```
 def sigmoid(x):
     return 1/(1+np.exp(-x))
-'''
+```
 
 ![fig3-7](/assets/img/neural_network/fig3-7.png){: width="400" height="300"}
 
@@ -124,10 +123,10 @@ Sigmoid 함수와 계단 함수의 가장 큰 차이점은 **매끄러움**이�
 ### ReLU 함수
 ReLU 함수는 최근에 자주 사용하는 활성화 함수이다. 이 함수는 입력이 0을 넘으면 입력값을 그대로 출력하고, 0이하이면 0을 출력하는 함수이다.
 
-'''
+```
 def relu(x):
     return np.maximum(0, x)
-'''
+```
 
 ![fig3-9](/assets/img/neural_network/fig3-9.png){: width="400" height="300"}
 
@@ -139,12 +138,12 @@ x & \text{if } x > 0 \\
 0 & \text{if } x \leq 0
 \end{cases}
 $$
-_[식3-7]_
+[식3-7]
 
 ## 신경망 구현하기 
 이제 Numpy의 다차원 배열을 이용해서 신경망을 구현해보자. 다차원 배열을 간단히 말해 "숫자의 배열"이다. 
 
-'''
+```
 import numpy as np
 
 # 일차원 배열
@@ -154,9 +153,9 @@ print(A)
 print(np.ndim(A))
 print(A.shape) #2차원 배열이상의 다차원 배열과 통일하기 위해 튜플을 반환한다.
 print(A.shape[0])
-'''
+```
 
-'''
+```
 # 2차원 배열
 B = np.array([[1,2],[3,4],[5,6]])
 
@@ -164,7 +163,7 @@ print(B)
 print(np.ndim(B))
 print(B.shape)
 print(B.shape[0])
-'''
+```
 
 2차원 배열을 특히 **행렬**이라고 부르고 가로방향을 **행**, 세로 방향을 **열**이라고 한다. 
 
@@ -174,7 +173,7 @@ print(B.shape[0])
 
 ![fig3-11](/assets/img/neural_network/fig3-11.png){: width="400" height="300"}
 
-'''
+```
 A = np.array([[1,2,3],[4,5,6]])
 B = np.array([[1,2],[3,4],[5,6]])
 
@@ -185,7 +184,7 @@ C = np.dot(A,B)
 print(C)
 print(np.ndim(C))
 print(C.shape)
-'''
+```
 
 이때 주의할 점은 Matrix의 Shape에 주의해아한다. 즉 다차원 배열을 곱하려면 두 행렬의 대응하는 차원의 원소 수를 일치시켜야 한다.
 
@@ -195,7 +194,7 @@ print(C.shape)
 
 ![fig3-14](/assets/img/neural_network/fig3-14.png){: width="400" height="300"}
 
-'''
+```
 X=np.array([1,2])
 print(X)
 
@@ -204,7 +203,7 @@ print(W)
 
 Y = np.dot(X,W)
 print(Y)
-'''
+```
 
 ### 3층 신경망 구현하기
 
@@ -256,7 +255,7 @@ w_{12}^{(1)} & w_{22}^{(1)} & w_{32}^{(1)}
 \end{pmatrix}
 $$
 
-'''
+```
 X=np.array([1.0, 0.5])
 W1 = np.array([[0.1, 0.3, 0.5], [0.2, 0.4, 0.6]])
 B1 =np.array([0.1, 0.2, 0.3])
@@ -266,13 +265,13 @@ print(X.shape)
 print(B1.shape)
 
 A1 = np.dot(X, W1)+B1
-'''
+```
 
 다음으로는 a노드의 값을 활성화 함수 h에 통과시켜 z를 출력한다. 
 
 ![fig3-18](/assets/img/neural_network/fig3-18.png){: width="400" height="300"}
 
-'''
+```
 def sigmoid(x):
     return 1/(1+np.exp(-x))
 
@@ -280,7 +279,7 @@ Z1 = sigmoid(A1)
 
 print(A1)
 print(Z1)
-'''
+```
 
 #### 1층에서 2층으로 신호 전달
 
@@ -288,7 +287,7 @@ print(Z1)
 
 ![fig3-19](/assets/img/neural_network/fig3-19.png){: width="400" height="300"}
 
-'''
+```
 W2 = np.array([[0.1, 0.4], [0.2,0.5], [0.3, 0.6]])
 B2 = np.array([0.1, 0.2])
 
@@ -298,13 +297,13 @@ print(B2.shape)
 
 A2 = np.dot(Z1, W2) + B2
 Z2 = sigmoid(A2)
-'''
+```
 
 #### 2층에서 출력층으로 신호 전달
 
 ![fig3-20](/assets/img/neural_network/fig3-20.png){: width="400" height="300"}
 
-'''
+```
 def identity_function(x):
     return x
 
@@ -315,11 +314,11 @@ A3 = np.dot(Z2, W3) + B3
 
 Y = identity_function(A3)
 print(Y)
-'''
+```
 
 지금까지의 구현을 정리해보자.
 
-'''
+```
 import numpy as np
 
 def sigmoid(x):
@@ -356,7 +355,7 @@ network = init_network()
 x = np.array([1.0,0.5])
 y = forward(network, x)
 print(y)
-'''
+```
 
 ## 출력층 설계하기
 
@@ -382,20 +381,20 @@ $$
 
 
 
-'''
+```
 def softmax_raw(a):
     exp_a = np.exp(a)
     sum_exp_a = np.sum(exp_a)
     y = exp_a/sum_exp_a
     return y 
-'''
+```
 
 >Softmax 함수를 구현할 때 주의할 점이 있다. Softmax 함수는 지수함수를 사용하는데, 종종 너무 큰 값이 반환되는 경우가 있다. 그리고 이런 큰 값을 나눠버리면 컴퓨터는 Overflow 문제를 겪고 불안정한 결과가 나올 수 있다.
 {: .prompt-warning}
 
 따라서 이러한 문제를 해결하기 위해 임의의 정수 C를 더하거나 빼서 Overflow 문제를 해결하고자 한다. C는 일반적으로 입력신호의 최댓값을 사용한다. 
 
-'''
+```
 def softmax(a):
     c = np.max(a)
     exp_a = np.exp(a-c)
@@ -403,22 +402,22 @@ def softmax(a):
     y = exp_a/sum_exp_a
 
     return y
-'''
+```
 
-'''
+```
 a = np.array([0.3, 2.9, 4.0])
 y = softmax(a)
 
 print(y)
 print(np.sum(y))
-'''
+```
 
 softmax함수의 특징적인 점은 **출력의 총합이 1**이라는 점이다. 이 성질 덕분에 softmax 함수의 출력을 **확률**로 해석할 수 있다. 
 
 | 즉, softmax 함수를 이용하여 특정 클래스의 점수(score)를 확률적(통계적)으로 대응시킬수 있게된다. 
 
 > 기계학습의 문제 풀이는 **학습**과 **추론**두단계로 이루어진다. 학습 단계에서는 모델을 학습하여 가중치를 최적화하고, 추론 단계에서는 학습한 모델로 미지의 데이터에 대한 추론을 수행한다. 이때 Softmax 함수는 학습 과정에서 예측값과 레이블 값 사이의 Loss를 줄이기 위해 사용되므로 학습시에만 사용하고 추론 시에는 보통 생략하는 경우가 많다.
-(: .prompt-info}
+{: .prompt-info}
 
 
 
