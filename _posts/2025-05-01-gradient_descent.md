@@ -72,6 +72,8 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 > 이러한 문제를 해결하기 위해 이후 추가적인 Optimization 기법들이 제안된다.
 {: .prompt-tip}
 
+{% include embed/youtube.html id='JdeemZDr-hU' %}
+
 경사하강법을 한마디로 정의하자면 **Gradient 의 반대 방향으로 한 발자국씩 내딛으며 함수값을 낮추는 방법**이다. 이때 위에서 언급했듯이 다변수 함수 $f$가 가장 빠르게 감소하는 방향은 Gradient의 반대방향  $−𝛻𝑓(𝐱)$이다. 식으로 나타내면 아래와 같다. 
 
 ![eq2](/assets/img/gradient_descent/eq2.png)
@@ -146,6 +148,8 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 위 그림처럼 SGD는 GD 보다 덜 신중하게 방향을 설정하지만 그렇게 때문에 더 빠르게 최소점에 도달할 수 있다. 이때 그림처럼 지그재그 방향으로 나아가는 이유는 각 시점마다 모든 데이터가 아닌 일부 데이터만을 고려한 기울기를 계산하기 때문이다. 전체적으로 보면 오히려 돌아가는 것처럼 보여서 GD보다 느리지 않을까 싶지만 한번의 업데이트를 하는데 걸리는 시간인 GD에 비해 월등히 짧기 때문에 더 빠르게 최저점에 도달할 수 있다고 한다. 
 
 이처럼 불규칙한 움직임을 갖는다는 특성 때문에 SGD는 종종 Local Minimum을 탈출할 기회를 얻을 수 있다. 따라서 복잡한 Loss 지형에서 더 유연한 탐색을 가능하게 한다. 
+
+{% include embed/youtube.html id='VbYTp0CIJkY' %}
 
 ### Mini-Batch Gradient Descent, 미니배치 경사 하강법
 하지만 SGD는 하나의 데이터만을 고려하기 때문에 대규모 데이터셋에서는 지나치게 편향된 기울기를 계산할 수 있다는 한계가 존재한다. 
