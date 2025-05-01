@@ -26,7 +26,7 @@ math: true
 
 즉 인공신경망에 **손실함수**라는 벌점을 주고, 인공신경망의 성능이 좋을수록 손실함수 값이 낮고, 성능이 나쁠수록 손실함수 값이 높다. Machine은 데이터를 통해 손실함수의 값을 낮추고자 한다. 
 
-![fig2](/assets/img/loss_function/fig2.png){: w="400" , h="300"}
+![fig2](/assets/img/loss_function/fig2.png){: w="600" , h="400"}
 
 일반적으로 자주 사용하는 손실함수에는 **평균 제곱 오차, Mean Squared Error(MSE)** 와 **교차 엔트로피 오차, Cross Entropy Error(CSE)** 가 있다. 
 
