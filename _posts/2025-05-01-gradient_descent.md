@@ -158,8 +158,8 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 하지만 무작정 batch size를 키운다면 오히려 GD와 비슷해져 또 다시 Local Minimum에 빠지는 문제가 발생할 수 있기 때문 학습 속도와 최적화 성능 사이의 Tradeoff를 고려해서 적절한 균형점을 찾아야한다. 
 
 > batch size와 Learning Rate의 조절을 위한 흥미로운 연구가 있다고 한다[^1]. 일반적으로 Batch size가 증가할수록 Validation Error가 증가한다. 이러한 문제를 해결하기 위해 다음 두가지 방법을 제안한다. 
-> **1. Linear Scaling Rule:** batch size를 키울때 Learning Rate 도 비례해서 키운다.
-> **2. Learning Rate Warmup:** 학습 초기에 Learning Rate을 0에서 시작해서 점진적으로 증가한다.
+> 1. Linear Scaling Rule: batch size를 키울때 Learning Rate 도 비례해서 키운다.
+> 2. Learning Rate Warmup: 학습 초기에 Learning Rate을 0에서 시작해서 점진적으로 증가한다.
 {: .prompt-tip}
 
 ### Momentum
