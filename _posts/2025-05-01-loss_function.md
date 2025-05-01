@@ -17,7 +17,9 @@ math: true
 # ```
 ---
 ## Loss Function 
-인간이 미리 기준을 정하고 그 기준에 맞게 분류하던 기존의 Rule Based Approach에서는 다양한 Feature를 모두 Cover하는 규칙을 모두 찾기란 불가능하다는 한계가 존재한다. 따라서 Machine Learning 에서는 machine이 스스로 데이터에서 규칙을 찾아내는 Data Driven Approach를 사용한다. 
+인간이 미리 기준을 정하고 그 기준에 맞게 분류하던 기존의 Rule Based Approach에서는 다양한 Feature를 모두 Cover하는 규칙을 모두 찾기란 불가능하다는 한계가 존재한다. 따라서 Machine Learning 에서는 machine이 스스로 데이터에서 규칙을 찾아내는 Data Driven Approach를 사용한다.[^1]
+
+[^1]: 본 포스팅은 "밑바닥부터 시작하는 딥러닝"과 수원대학교 한경훈 교수님의 강의를 참고했습니다.
 
 ![fig1](/assets/img/loss_function/fig1.png)
 
