@@ -173,7 +173,7 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 
 이처럼 진동하면서 수렴하는 방식은 상당히 비효율적이므로 우리는 이 진동의 폭을 줄이고자 한다. 따라서 이런 문제를 해결하기 위해 **Momentum은 이전 Gradient들을 누적하여 현재의 이동 방향을 결정한다.** 
 
-{% include embed/youtube.html id='iudXf5n_3ro' %}
+{% include embed/youtube.html id='qfb2ezDWGIU' %}
 
 Momentum의 동작원리를 알아보자.
 1. 초기에는 GD와 동일한 방향으로 이동한다.
