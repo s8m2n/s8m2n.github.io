@@ -1,7 +1,7 @@
 ---
 title: "Loss Function"
 date: 2025-04-30 
-categories: [Study, DeepLearning]
+categories: [Study, Deep Learning]
 tags: [mean squred error, cross entropy error, loss function]  # TAG names should always be lowercase
 description: 
 
