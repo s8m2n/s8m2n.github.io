@@ -1,7 +1,7 @@
 ---
 title: "Gradient Descent"
 date: 2025-04-30 
-categories: [Study, DeepLearning]
+categories: [Study, Deep Learning]
 tags: [gradient descent, learning rate, partial differnetiation]  # TAG names should always be lowercase
 # description: 
 
