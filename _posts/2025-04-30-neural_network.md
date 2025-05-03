@@ -1,7 +1,7 @@
 ---
 title: "Neural Network"
 date: 2025-04-30 
-categories: [Study, DeepLearning]
+categories: [Study, Deep Learning]
 tags: [deep learning, neural network, activation function, softmax function]  # TAG names should always be lowercase
 description: Deep Learning from Scratch Ch3
 
