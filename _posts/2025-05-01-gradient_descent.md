@@ -183,5 +183,18 @@ Momentum의 동작원리를 알아보자.
 
 종종 관성으로 인해 최저점을 지나치는 경우도 있지만 전반적으로 더 빠르고 효율적인 학습이 가능하다. 
 
+
+### RMSProp(Root Mean Squared Propagation)
+Momentum이 이전의 Gradient 값들을 누적해서 더했다면, RMSProp은 각 파라미터에 대한 편미분 값을 제곱해서 누적하는 방식이다. 이는 각 파라미터들의 전체적인 이력변화를 반영하여 학습의 안정성을 높이고자 하는 시도이다.
+
+[To be Updated...]
+
+### ADAM(Adaptive Momentum Estimation)
+현재 가장 많이 사용되는 알고리즘으로 Momentum과 RMSprop을 합친 알고리즘이다. 이전 gradient의 관성을 사용하고, learning rate의 경향을 반영한다.
+
+[To be Updated...]
+
+
+
 [^1]: [Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour, 2017](https://arxiv.org/abs/1706.02677)
 
