@@ -91,7 +91,7 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 
 ![fig8](/assets/img/gradient_descent/fig8.png)
 
-이러한 문제를 해결하기 위해 새로운 알고리즘들이 등장한다. 각각의 구체적인 알고리즘에 대해 알아보기 전에 Weight Initialization을 먼저 알아보자. 
+이러한 문제를 해결하기 위해 새로운 알고리즘들이 등장한다. 각각의 구체적인 알고리즘에 대해서는 Optimization 에서 자세히 알아보자. 이번 장에서는 Weight Initialization을 먼저 알아보자. 
 
 ### Weight Initialization
 위에서 언급했듯이 **함수의 Gloabal Minimum에 도달하기 위해서는 시작점이 중요하다.** 초깃값을 어떻게 설정하는지에 따라 신경망의 학습 성능이 크게 달라질 수 있다. 가장 널리 알려진 방식으로는 LeCun, He, Xavier 방식이 있다. 이 세 방식들은 공통적으로 Weight를 평균이 0인 랜덤한 값으로 초기화하며 웨이트의 분산 값은 각 방식마다 다르게 설정한다. (Bias를 일반적으로 0으로 초기화하거나 작은 양수 값으로 설정한다.)
@@ -139,62 +139,3 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 이러한 문제를 해결하기 위해 3가지 방법 모두 $N_\text{in}$이 클수록 분산을 작게 하여 Weight를 0에 더 가깝게 초기화한다. 이는 순전파 과정에서 분산이 층을 지나며 급격히 커지는 문제를 방지한다. 다만 Xavier 방식에서는 $N_\text{out}$도 함께 고려하는데, 이는 역전파 과정에서 발생하는 **Gradient Exploding 문제**를 막기 위함이다. $N_\text{out}$이 크다면 $N_\text{in}$이 클때와 마찬가지로 Gradient의 분산 값이 매우 커지게 되고 이는 학습을 불안정하게 만들 수 있다. 
 
 결론적으로 이러한 초기화 방식들은 신경망의 깊이가 깊어져도 안정적으로 학습이 진행되도록 도와준다. 적절한 초기화는 Gradient Vanishing/Exploding 문제를 해결하고 빠르고 안정적인 학습을 가능하게 한다.
-
-### Stochastic Gradient Descent(SGD), 확률적 경사 하강법
-확률적 경사 하강법은 경사하강법의 한계를 개선한 방법이다. 경사하강법이 모든 데이터를 고려하여 Loss를 계산하는 반면, **SGD는 랜덤하게 데이터 하나를 선택하여 Loss를 계산한다.** 이처럼 무작위로 데이터를 선택하는 과정 때문에 Stochastic 이라는 이름이 붙는다. 
-
-![fig9](/assets/img/gradient_descent/fig9.png){: w="400", h="300"}
-
-위 그림처럼 SGD는 GD 보다 덜 신중하게 방향을 설정하지만 그렇게 때문에 더 빠르게 최소점에 도달할 수 있다. 이때 그림처럼 지그재그 방향으로 나아가는 이유는 각 시점마다 모든 데이터가 아닌 일부 데이터만을 고려한 기울기를 계산하기 때문이다. 전체적으로 보면 오히려 돌아가는 것처럼 보여서 GD보다 느리지 않을까 싶지만 한번의 업데이트를 하는데 걸리는 시간인 GD에 비해 월등히 짧기 때문에 더 빠르게 최저점에 도달할 수 있다고 한다. 
-
-이처럼 불규칙한 움직임을 갖는다는 특성 때문에 SGD는 종종 Local Minimum을 탈출할 기회를 얻을 수 있다. 따라서 복잡한 Loss 지형에서 더 유연한 탐색을 가능하게 한다. 
-
-{% include embed/youtube.html id='VbYTp0CIJkY' %}
-
-### Mini-Batch Gradient Descent, 미니배치 경사 하강법
-하지만 SGD는 하나의 데이터만을 고려하기 때문에 대규모 데이터셋에서는 지나치게 편향된 기울기를 계산할 수 있다는 한계가 존재한다. 
-
-따라서 **Mini-Batch GD에서는 하나의 데이터가 아닌 여러개의 데이터 묶음을 Loss 계산에 사용한다.**\
-예를 들어 Batch Size가 N이라고 한다면 N개의 데이터를 랜덤하게 뽑아 그 평균을 Loss로 삼고 gradient를 계산한다. 특히 병렬 연산을 지원하는 GPU를 활용하면 Mini Batch GD의 효율성은 훨씬 높아진다. 
-
-![fig11](/assets/img/gradient_descent/fig11.png){: w="400", h="300"}
-
-하지만 무작정 batch size를 키운다면 오히려 GD와 비슷해져 또 다시 Local Minimum에 빠지는 문제가 발생할 수 있기 때문에 학습 속도와 최적화 성능 사이의 Tradeoff를 고려해서 적절한 균형점을 찾아야한다. 
-
-> batch size와 Learning Rate의 조절을 위한 흥미로운 연구가 있다고 한다[^1]. 일반적으로 Batch size가 증가할수록 Validation Error가 증가한다. 이러한 문제를 해결하기 위해 다음 두가지 방법을 제안한다. 
-> 1. Linear Scaling Rule: batch size를 키울때 Learning Rate 도 비례해서 키운다.
-> 2. Learning Rate Warmup: 학습 초기에 Learning Rate을 0에서 시작해서 점진적으로 증가한다.
-{: .prompt-tip}
-
-### Momentum
-이름에서 알 수 있듯, 관성의 성질을 이용하는 방법이다. 이전의 GD, SGD, mini-batch GD 의 경우 현재 시점의 Gradient 만 고려한다. 하지만 이런 방법들은 특정한 상황, 특히 Loss Function이 타원형과 같은 형태일 때 문제가 발생할 수 있다. Gradient는 가장 가파른 방향을 향하기 때문에 항상 등고선에 수직하다. 따라서 타원형의 Loss Function의 경우 아래 그림과 같이 지그재그 경로로 수렴하게 된다. 
-
-![fig12](/assets/img/gradient_descent/fig12.png){: w="500", h="400"}
-
-이처럼 진동하면서 수렴하는 방식은 상당히 비효율적이므로 우리는 이 진동의 폭을 줄이고자 한다. 따라서 이런 문제를 해결하기 위해 **Momentum은 이전 Gradient들을 누적하여 현재의 이동 방향을 결정한다.** 
-
-{% include embed/youtube.html id='qfb2ezDWGIU' %}
-
-Momentum의 동작원리를 알아보자.
-1. 초기에는 GD와 동일한 방향으로 이동한다.
-2. 현재와 이전 Gradient를 합산하여 방향을 결정한다. 예를 들어 첫 이동이 왼쪽이었다면, 두번째 이동이 오른쪽이어도 첫 이동의 영향으로 인해 오른쪽으로의 이동이 줄어든다.
-3. 세번째 이동이 왼쪽이어도 직전의 오른쪽 이동 관성으로 인해 왼쪽으로의 이동이 줄어든다.
-4. 이런 과정이 반복되면서 불필요한 진동을 상쇄하며 최소점을 향해 수렴한다.
-
-종종 관성으로 인해 최저점을 지나치는 경우도 있지만 전반적으로 더 빠르고 효율적인 학습이 가능하다. 
-
-
-### RMSProp(Root Mean Squared Propagation)
-Momentum이 이전의 Gradient 값들을 누적해서 더했다면, RMSProp은 각 파라미터에 대한 편미분 값을 제곱해서 누적하는 방식이다. 이는 각 파라미터들의 전체적인 이력변화를 반영하여 학습의 안정성을 높이고자 하는 시도이다.
-
-[To be Updated...]
-
-### ADAM(Adaptive Momentum Estimation)
-현재 가장 많이 사용되는 알고리즘으로 Momentum과 RMSprop을 합친 알고리즘이다. 이전 gradient의 관성을 사용하고, learning rate의 경향을 반영한다.
-
-[To be Updated...]
-
-
-
-[^1]: [Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour, 2017](https://arxiv.org/abs/1706.02677)
-
