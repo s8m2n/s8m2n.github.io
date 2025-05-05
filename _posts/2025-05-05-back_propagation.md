@@ -154,7 +154,7 @@ print("dOrange_num:", int(dnum_orange))
 print("dTax:", dtax)
 ```
 
-![fig7](/assets/img/back_propagation/fig7.png){: w="400", h="300"}
+![fig7](/assets/img/back_propagation/fig7.png)
 
 
 ### 활성화 함수의 역전파
