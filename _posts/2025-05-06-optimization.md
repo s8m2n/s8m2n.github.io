@@ -18,9 +18,7 @@ math: true
 ---
 
 ## Optimization 알고리즘
-신경망 학습의 목적은 Loss Function의 값을 가능한 한 낮추는 매개변수를 찾는 것이다. 다시 말해 매개변수의 최적값을 찾는 문제이고 이러한 문제를 푸는 것을 **Optimization, 최적화**라고 한다. 최적화 문제를 푸는 가장 간단한 방법은 매 Step마다 매개변수의 Gradient의 반대 방향으로 이동하는 경사하강법이 있다. 하지만 경사하강법(GD)은 Local Minimum 또는 Plateau에 안착하는 문제가 있었다.
-
-이런 문제를 해결하기 위해 다양한 최적화 알고리즘들이 연구되었다. 이번 장에서는 각 알고리즘들에 대해 구체적으로 알아보자.
+신경망 학습의 목적은 Loss Function의 값을 가능한 한 낮추는 매개변수를 찾는 것이다. 다시 말해 매개변수의 최적값을 찾는 문제이고 이러한 문제를 푸는 것을 **Optimization, 최적화**라고 한다. 최적화 문제를 푸는 가장 간단한 방법은 매 Step마다 매개변수의 Gradient의 반대 방향으로 이동하는 경사하강법이 있다. 하지만 경사하강법(GD)은 Local Minimum 또는 Plateau에 안착하는 문제가 있었다. 이런 문제를 해결하기 위해 다양한 최적화 알고리즘들이 연구되었다. 이번 장에서는 각 알고리즘들에 대해 구체적으로 알아보자[^1].
 
 ![optimization](/assets/img/optimization/optimization.gif){: w="400", h="300"}
 
@@ -58,7 +56,7 @@ class SGD:
 
 하지만 무작정 batch size를 키운다면 오히려 GD와 비슷해져 또 다시 Local Minimum에 빠지는 문제가 발생할 수 있기 때문에 학습 속도와 최적화 성능 사이의 Tradeoff를 고려해서 적절한 균형점을 찾아야한다. 
 
-> batch size와 Learning Rate의 조절을 위한 흥미로운 연구가 있다고 한다[^1]. 일반적으로 Batch size가 증가할수록 Validation Error가 증가한다. 이러한 문제를 해결하기 위해 다음 두가지 방법을 제안한다. 
+> batch size와 Learning Rate의 조절을 위한 흥미로운 연구가 있다고 한다[^2]. 일반적으로 Batch size가 증가할수록 Validation Error가 증가한다. 이러한 문제를 해결하기 위해 다음 두가지 방법을 제안한다. 
 > 1. Linear Scaling Rule: batch size를 키울때 Learning Rate 도 비례해서 키운다.
 > 2. Learning Rate Warmup: 학습 초기에 Learning Rate을 0에서 시작해서 점진적으로 증가한다.
 {: .prompt-tip}
@@ -137,11 +135,11 @@ class Momentum:
 * $\frac{\partial L}{\partial\mathbf{W}}$은 $\mathbf{W}$에 대한 손실 함수의 기울기
 * $\eta$는 학습률을 뜻한다. 
 
-여기서 $\mathbf{h}$라는 변수는 기존 기울기의 값을 제곱해서 더해주는 연산이다 (Hadamard Product)[^2]. 매개변수를 갱신할때마다 $\frac{1}{\sqrt{\mathbf{h}}}$을 곱해서 학습률 $\eta{\frac{1}{\sqrt{\mathbf{h}}}}$을 조정하는데 이는 매개변수의 원소 중에서 크게 갱신된, **즉 기울기값이 큰 원소의 학습률을 줄인다는 목적을 가진다.**
+여기서 $\mathbf{h}$라는 변수는 기존 기울기의 값을 제곱해서 더해주는 연산이다 (Hadamard Product)[^3]. 매개변수를 갱신할때마다 $\frac{1}{\sqrt{\mathbf{h}}}$을 곱해서 학습률 $\eta{\frac{1}{\sqrt{\mathbf{h}}}}$을 조정하는데 이는 매개변수의 원소 중에서 크게 갱신된, **즉 기울기값이 큰 원소의 학습률을 줄인다는 목적을 가진다.**
 
 AdaGrad 방식을 적용한 경로는 아래와 같다. 
 
-![fig6-6](/assets/img/optimization/fig6-6.png)
+![fig6-6](/assets/img/optimization/fig6-6.png){: w="400", h="300"}
 
 ```
 class AdaGrad:
@@ -217,7 +215,7 @@ $\beta_2$로 AdaGrad를 변형해서 아래와 같은 점화식을 세운다.
 
 Adam 방식을 적용한 경로는 아래와 같다. 
 
-![fig6-7](/assets/img/optimization/fig6-7.png)
+![fig6-7](/assets/img/optimization/fig6-7.png){: w="400", h="300"}
 
 ```
 class Adam:
@@ -260,5 +258,6 @@ class Adam:
 
 어느 방식을 사용하냐는 풀어야 하는 문제에 따라 다르고 여러 하이퍼 파리미터를 어떻게 설정하느냐에 따라서도 결과가 달라진다. 
 
-[^1]: [Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour, 2017](https://arxiv.org/abs/1706.02677)
-[^2}: [Hadarmard Product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
+[^1]: 본 포스팅은 사이토 고키의 "밑바닥부터 시작하는 딥러닝"과 수원대학교 한경훈 교수님의 강의를 참고했습니다. 
+[^2]: [Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour, 2017](https://arxiv.org/abs/1706.02677)
+[^3]: [Hadarmard Product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
