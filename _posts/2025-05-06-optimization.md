@@ -137,7 +137,7 @@ class Momentum:
 * $\frac{\partial L}{\partial\mathbf{W}}$은 $\mathbf{W}$에 대한 손실 함수의 기울기
 * $\eta$는 학습률을 뜻한다. 
 
-여기서 $\mathbf{h}$라는 변수는 기존 기울기의 값을 제곱해서 더해주는 연산이다 (Hadamard Product)[^2]. 매개변수를 갱신할때마다 $\frac{1}{\sqrt{\mathbf{h}}}$을 곱해서 학습률($\eta{\frac{1}{\sqrt{\mathbf{h}}}$)을 조정하는데 이는 매개변수의 원소 중에서 크게 갱신된, **즉 기울기값이 큰 원소의 학습률을 줄인다는 목적을 가진다.**
+여기서 $\mathbf{h}$라는 변수는 기존 기울기의 값을 제곱해서 더해주는 연산이다 (Hadamard Product)[^2]. 매개변수를 갱신할때마다 $\frac{1}{\sqrt{\mathbf{h}}}$을 곱해서 학습률 $\eta{\frac{1}{\sqrt{\mathbf{h}}}}$을 조정하는데 이는 매개변수의 원소 중에서 크게 갱신된, **즉 기울기값이 큰 원소의 학습률을 줄인다는 목적을 가진다.**
 
 AdaGrad 방식을 적용한 경로는 아래와 같다. 
 
