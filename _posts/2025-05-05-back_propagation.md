@@ -252,7 +252,7 @@ class Affine:
 ```
 
 
-![fig5-29](/assets/img/back_propagation/fig5-29.png){: w="400", h="300"}
+![fig5-29](/assets/img/back_propagation/fig5-29.png){: w="600", h="400"}
 
 ```
 class SoftmaxWithLoss:
