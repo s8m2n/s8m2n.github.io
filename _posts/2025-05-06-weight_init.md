@@ -33,7 +33,7 @@ math: true
 
 따라서 데이터가 0과 1에 치우쳐서 분포하게 되면 역전파의 기울기 값이 점점 작아지다가 사라지고 이를 **Vanishing Gradient , 기울기 소실**문제라고 한다. 특히 층이 깊어질수록 기울기 소실은 큰 문제가 된다. 
 
-![fig13](/assets/img/weight_init/fig13.png){: w="400", h="300"}
+![fig13](/assets/img/weight_init/fig13.png){: w="600", h="400"}
 
 
 다음은 반대로 평균이 0, 표준편차가 0.01인 정규 분포로 가중치를 초기화하는 상황을 가정하자. 각 층의 활성화 분포는 아래와 같다. 
@@ -94,7 +94,8 @@ Xavier 초깃값을 이용할때 활성화 분포는 아래와 같다.
 
 ![xavier](/assets/img/weight_init/xavier.png){: w="400", h="300"}
 
-> $N_\text{in}$과 $N_\text{out}$ 은 각 레이어의 입력과 출력 노드의 수를 의미한다. $N_\text{in}$이 크다면 그만큼 많은 입력값이 Weight와 곱해지고 더해지기 때문에 Activation에 들어오는 값들의 분산값이 커진다. 하지만 분산이 지나치게 큰 경우, 특히 Sigmoid와 같은 함수를 사용한다면 Gradient 가 0에 가까워져 Gradient Vanishing 문제가 발생할 수 있다. {: .prompt-info}
+> $N_\text{in}$과 $N_\text{out}$ 은 각 레이어의 입력과 출력 노드의 수를 의미한다. $N_\text{in}$이 크다면 그만큼 많은 입력값이 Weight와 곱해지고 더해지기 때문에 Activation에 들어오는 값들의 분산값이 커진다. 하지만 분산이 지나치게 큰 경우, 특히 Sigmoid와 같은 함수를 사용한다면 Gradient 가 0에 가까워져 Gradient Vanishing 문제가 발생할 수 있다.
+{: .prompt-info}
 
 이러한 문제를 해결하기 위해 3가지 방법 모두 $N_\text{in}$이 클수록 분산을 작게 하여 Weight를 0에 더 가깝게 초기화한다. 이는 순전파 과정에서 분산이 층을 지나며 급격히 커지는 문제를 방지한다. 다만 Xavier 방식에서는 $N_\text{out}$도 함께 고려하는데, 이는 역전파 과정에서 발생하는 **Gradient Exploding 문제**를 막기 위함이다. $N_\text{out}$이 크다면 $N_\text{in}$이 클때와 마찬가지로 Gradient의 분산 값이 매우 커지게 되고 이는 학습을 불안정하게 만들 수 있다. 
 
