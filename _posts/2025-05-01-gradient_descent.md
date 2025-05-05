@@ -2,7 +2,7 @@
 title: "Gradient Descent"
 date: 2025-04-30 
 categories: [Study, Deep Learning]
-tags: [gradient descent, learning rate, partial differnetiation]  # TAG names should always be lowercase
+tags: [gradient descent, learning rate, partial differnetiation, weight initialization]  # TAG names should always be lowercase
 # description: 
 
 math: true
