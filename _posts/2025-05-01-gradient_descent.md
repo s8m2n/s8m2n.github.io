@@ -17,7 +17,7 @@ math: true
 # ```
 ---
 
-## 편미분, Partial Differentiation
+## 편미분, Partial Differentiation[^1]
 두 개 이상의 변수에 대한 미분을 편미분이라고 한다. 간단하게 아래와 같은 식을 예로 들수 있다.
 
 ![eq4.6](/assets/img/gradient_descent/eq4.6.png)
@@ -92,3 +92,5 @@ Machine Learning 의 목표는 Loss Function을 최소화하는 최적의 매개
 ![fig8](/assets/img/gradient_descent/fig8.png)
 
 이러한 문제를 해결하기 위해 새로운 알고리즘들이 등장한다. 각각의 구체적인 알고리즘에 대해서는 Optimization 에서 자세히 알아보자. 
+
+[^1]: 본 포스팅은 사이토 고키의 "밑바닥부터 시작하는 딥러닝"과 수원대학교 한경훈 교수님의 강의를 참고했습니다. 
