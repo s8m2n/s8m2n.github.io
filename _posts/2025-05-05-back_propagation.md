@@ -193,7 +193,7 @@ class Relu:
 
 ![fig3-7](/assets/img/back_propagation/fig3-7.png){: w="400", h="300"}
 
-Sigmoid 함수는 $y=1/(1+exp^(-x))$와 같고 이를 계산 그래프로 그리면 아래와 같다. 
+Sigmoid 함수는 $y=1/(1+exp^{(-x)})$와 같고 이를 계산 그래프로 그리면 아래와 같다. 
 
 ![fig5-19](/assets/img/back_propagation/fig5-19.png){: w="400", h="300"}
 
