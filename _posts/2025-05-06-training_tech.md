@@ -133,7 +133,7 @@ Xavier 초깃값을 이용할때 활성화 분포는 아래와 같다.
 
 또한 다음 수식을 이용해 배치 정규화 계층마다 고유한 확대(Scale)과 변환(Shift)를 수행한다. 
 
-![e6.8](/assets/img/training_tech/e6.8.png){: w="400", h="400"}
+![e6.8](/assets/img/training_tech/e6.8.png)
 
 처음에는 $\gamma=1, \beta=0 $부터 시작하여 학습이 진행됨에 따라 적절한 값으로 조정해나간다. 
 
@@ -190,7 +190,8 @@ L1, L2 regularization은 손실함수에 penalty 항을 추가하는 가중치 �
 
 ![fig6-22](/assets/img/training_tech/fig6-22.png){: w="400", h="300"}
 
-| 뉴런의 연결을 끊는 것이 왜 더 좋은 성능을 내는걸까? 내가 전에 진행한 Reservoir Computing 연구에서 사용한 ESN모델은 다양한 하이퍼 파리미터가 있었다. 그 중 Reservoir 안의 뉴런들 간의 연결 정도를조정하는 Connectivity(0.0~1.0) 파라미터가 있다. 이때 connectivity를 낮추면 뉴런들이 Fully Connected 되지 않고 일부 뉴런들만 연결이 되는데 이렇게 될 경우 뉴런들로 연결된 각 경로가 특정 Feature에 특화된 학습만을 진행할 수 있고 이후 가중치의 조합을 통해 더 풍부한 표현이 학습 가능하다고 한다. Drop out도 아마 비슷한 맥락이지 않을까 생각한다.[^5]
+> 뉴런의 연결을 끊는 것이 왜 더 좋은 성능을 내는걸까? 내가 전에 진행한 Reservoir Computing 연구에서 사용한 ESN모델은 다양한 하이퍼 파리미터가 있었다. 그 중 Reservoir 안의 뉴런들 간의 연결 정도를조정하는 Connectivity(0.0~1.0) 파라미터가 있다. 이때 connectivity를 낮추면 뉴런들이 Fully Connected 되지 않고 일부 뉴런들만 연결이 되는데 이렇게 될 경우 뉴런들로 연결된 각 경로가 특정 Feature에 특화된 학습만을 진행할 수 있고 이후 가중치의 조합을 통해 더 풍부한 표현이 학습 가능하다고 한다. Drop out도 아마 비슷한 맥락이지 않을까 생각한다.[^5]
+{: .prompt-info}
 
 Drop Out을 사용한 실험 결과이다. 
 
@@ -202,7 +203,7 @@ drop out을 적용하면 훈련 데이터와 시험 데이터의 정확도 차�
 
 
 ## HyperParameters, Validation Data 
-일반적으로 **parameter**란 데이터를 통해 모델이 학습하는 값이다. 예를 들어 Weight, Bias, Scale & Shift Factor 등이 있다. 이는 데이터가 많을수록 모델이 학습을 통해 쉽게 최적의 값을 찾아낼 수 있다. 
+일반적으로 **Parameter**란 데이터를 통해 모델이 학습하는 값이다. 예를 들어 Weight, Bias, Scale & Shift Factor 등이 있다. 이는 데이터가 많을수록 모델이 학습을 통해 쉽게 최적의 값을 찾아낼 수 있다. 
 
 반면 **HyperParameter**는 사람이 직접 결정하는 값이다. 예를 들어 은닉층 뉴런의 개수, 층의 개수, Learning rate, 손실함수 종류, optimizer 종류 등이 있다. 좋은 Hyper Parameter 값을 찾아내기 위해서는 반복적인 실험을 통해 알아낼 수 밖에 없다. 
 
