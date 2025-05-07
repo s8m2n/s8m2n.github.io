@@ -104,9 +104,8 @@ Xavier 초깃값을 이용할때 활성화 분포는 아래와 같다.
 결론적으로 이러한 초기화 방식들은 신경망의 깊이가 깊어져도 안정적으로 학습이 진행되도록 도와준다. 적절한 초기화는 Gradient Vanishing/Exploding 문제를 해결하고 빠르고 안정적인 학습을 가능하게 한다.
 
 ## Batch Normalization, 배치 정규화
-가중치 초깃값을 적절히 설정하면 각 층의 활성화 값 분포가 적당히 퍼지면서 학습이 원활해지는 것을 확인했다. 배치 정규화에서는 **각 층이 활성화 값을 적당히 퍼뜨리도록 강제**하는 방법을 알아보자.
+가중치 초깃값을 적절히 설정하면 각 층의 활성화 값 분포가 적당히 퍼지면서 학습이 원활해지는 것을 확인했다. 배치 정규화에서는 **각 층이 활성화 값을 적당히 퍼뜨리도록 강제**하는 방법을 알아보자.[^2]
 
-[배치 정규화에 대해 정리한 블로그](https://ffighting.net/deep-learning-paper-review/vision-model/batch-normalization/)
 
 배치 정규화는 나온지 오래되지 않았음에도 불구하고 뛰어난 결과로 인해 여러 주목을 받는 기술이다. 배치 정규화의 의의는 
 1. 학습을 빨리 진행할 수 있다.
@@ -116,7 +115,7 @@ Xavier 초깃값을 이용할때 활성화 분포는 아래와 같다.
 
 기본 아이디어는 **각 층의 활성화 값이 적당히 분포되도록 조정하는 것이다**. 이를 위해 아래와 같이 Batch Norm 계층을 신경망에 추가한다. 
 
-![fig6-16](/assets/img/training_tech/fig6-16.png){: w="400", h="300"}
+![fig6-16](/assets/img/training_tech/fig6-16.png){: w="600", h="400"}
 
 여기서 **배치 처리**란, 여러개의 입력 데이터를 묶어서 한번에 처리하는 방식을 의미한다. 특히 GPU를 활용하는 대부분의 수치 계산 라이브러리들은 작은 배열을 한개식 처리할때 보다 여러개의 배열을 한번에 처리할때 훨씬 효율적으로 동작한다고 한다. 우선 자주 나오는 용어를 간단히 정리하자.
 * 배치: 묶음
@@ -128,13 +127,13 @@ Xavier 초깃값을 이용할때 활성화 분포는 아래와 같다.
 
 배치 정규화는 학습시 미니배치 묶음으로 학습을 진행한다. 일반적으로 평균이 0, 분산이 1이 되도록 미니배치 단위로 정규화한다. 수식은 아래와 같다. 
 
-![e6.7](/assets/img/training_tech/e6.7.png)
+![e6.7](/assets/img/training_tech/e6.7.png){: w="400", h="400"}
 
-미니배치 $\emph{B}=[{x_1, x_2, ... x_m}]$이라는 $m$개의 입력 데이터 집합에 대해서 평균 $\mu_B$와 $\sigma^2_B$를 구한다. 그리고 위 식을 이용해서 입력데이터의 평균과 분산이 각각 0과 1이 되도록 정규화한다. 이와 같은 처리는 활성화 함수앞에 추가하여 데이터 분포를 덜 치우치게 할 수 있다. 
+미니배치 $B=[{x_1, x_2, ... x_m}]$이라는 $m$개의 입력 데이터 집합에 대해서 평균 $\mu_B$와 $\sigma^2_B$를 구한다. 그리고 위 식을 이용해서 입력데이터의 평균과 분산이 각각 0과 1이 되도록 정규화한다. 이와 같은 처리는 활성화 함수앞에 추가하여 데이터 분포를 덜 치우치게 할 수 있다. 
 
 또한 다음 수식을 이용해 배치 정규화 계층마다 고유한 확대(Scale)과 변환(Shift)를 수행한다. 
 
-![e6.8](/assets/img/training_tech/e6.8.png)
+![e6.8](/assets/img/training_tech/e6.8.png){: w="400", h="400"}
 
 처음에는 $\gamma=1, \beta=0 $부터 시작하여 학습이 진행됨에 따라 적절한 값으로 조정해나간다. 
 
@@ -147,7 +146,7 @@ Xavier 초깃값을 이용할때 활성화 분포는 아래와 같다.
 ![fig6-19](/assets/img/training_tech/fig6-19.png){: w="400", h="400"}
 
 ## Overfitting 
-**Overfitting 이란 신경망이 훈련데이터에 지나치게 적응되어 그 외의 실제 데이터에 대해서는 제대로 대응하지 못하는 상태를 의미한다[^2].**
+**Overfitting 이란 신경망이 훈련데이터에 지나치게 적응되어 그 외의 실제 데이터에 대해서는 제대로 대응하지 못하는 상태를 의미한다[^3].**
 
 > 쉬운 예시로 Train 데이터를 "문제집", Test 데이터를 "수능"이라고 한다면 문제집만 너무 많이 풀어서 수능 문제는 잘 못푸는 경우를 생각해볼 수 있다.
 {: .prompt-tip}
@@ -174,8 +173,8 @@ Overfitting 은 Regulzation이라는 규제 기법을 사용하여 완화할 수
 #### Weight Decay, 가중치 감소
 Weight Decay란 오버피팅을 억제하기 위한 규제 방법중 한가지로 학습 과정에서 큰 가중치에 대해서는 그에 상응하는 큰 Penalty를 부과해서 오버피팅을 억제하는 기법이다. 일반적으로 오버피팅은 가중치 매개변수의 값이 커서 발생하는 경우가 많다. 
 
-* L2 Regularization : $𝐿^2-regularization : 새로운 손실함수 = 기존 손실함수 + 1/2×𝜆×(가중치의 제곱의 합)$
-* L1 Regularization : $𝐿^1-regularization : 새로운 손실함수 = 기존 손실함수 + 𝜆×(가중치의 절대값의 합)$
+* $𝐿^2-regularization : 새로운 손실함수 = 기존 손실함수 + 1/2×𝜆×(가중치의 제곱의 합)$
+* $𝐿^1-regularization : 새로운 손실함수 = 기존 손실함수 + 𝜆×(가중치의 절대값의 합)$
 
 위와 같이 손실함수에 **추가적인 Penalty 항**을 더해서 새로운 손실함수를 정의한다. 이때 가중치 제곱합을 더하는지, 절대값합을 더하는지에 따라 L2 regularization과 L1 regularization이 있다.\
 Optimizer들은 손실함수 값을 낮추고 이로 인해 기존 손실함수와 Penalty로 인한 항 모두 낮아진다. 기존 손실함수는 예측값과 정답 사이의 오차이므로 이 값을 낮춘다는 것은 가중치를 Data에 맞도록 fitting 해 나가는 과정이다. 하지만 Penalty 항은 가중치의 합으로 구성되어 있고 이 값을 낮춘다는 의미는 가중치를 0에 가깝도록 조정하여 정보를 잃게 만드는 과정이다. 즉 Penalty 항은 기존 손실함수의 최적화로 인한 가중치의 과도한 데이터 피팅을 억제하는 역할을 한다. $𝜆$는 종규화 세기를 조정하는 하이퍼파라미터로 이 값이 클수록 큰 가중치에 대한 penalty가 커진다. 
@@ -187,15 +186,15 @@ L2 Regularization을 구현한 결과는 아래와 같다.
 앞선 결과와 달리 Train 정확도와 Test 정확도의 차이가 줄어들었다. 다시 말해 오버피팅이 억제되었음을 알수 있다, 또한 Train 정확도 역시 100%보다 줄어든 것을 확인할 수 있다. 
 
 #### Drop Out
-L1, L2 regularization은 손실함수에 penalty 항을 추가하는 가중치 감소 방법이다. 하지만 신경망이 복잡해지면 이 방법은 효과적이지 않을 수 있다. 이런 경우 Drop Out이라는 기법을 추가적으로 도입할 수 있다. **Drop Out이란 훈련 시 은닉층의 뉴런을 무작위로 골라 삭제하는 방법이다.** 주의할 점은 Drop Out은 학습시에만 적용하고 Test 시에는 모든 뉴런을 사용해야 한다.[^3]
+L1, L2 regularization은 손실함수에 penalty 항을 추가하는 가중치 감소 방법이다. 하지만 신경망이 복잡해지면 이 방법은 효과적이지 않을 수 있다. 이런 경우 Drop Out이라는 기법을 추가적으로 도입할 수 있다. **Drop Out이란 훈련 시 은닉층의 뉴런을 무작위로 골라 삭제하는 방법이다.** 주의할 점은 Drop Out은 학습시에만 적용하고 Test 시에는 모든 뉴런을 사용해야 한다.[^4]
 
 ![fig6-22](/assets/img/training_tech/fig6-22.png){: w="400", h="300"}
 
-| 뉴런의 연결을 끊는 것이 왜 더 좋은 성능을 내는걸까? 내가 전에 진행한 Reservoir Computing 연구에서 사용한 ESN모델은 다양한 하이퍼 파리미터가 있었다. 그 중 Reservoir 안의 뉴런들 간의 연결 정도를조정하는 Connectivity(0.0~1.0) 파라미터가 있다. 이때 connectivity를 낮추면 뉴런들이 Fully Connected 되지 않고 일부 뉴런들만 연결이 되는데 이렇게 될 경우 뉴런들로 연결된 각 경로가 특정 Feature에 특화된 학습만을 진행할 수 있고 이후 가중치의 조합을 통해 더 풍부한 표현이 학습 가능하다고 한다. Drop out도 아마 비슷한 맥락이지 않을까 생각한다.[^4]
+| 뉴런의 연결을 끊는 것이 왜 더 좋은 성능을 내는걸까? 내가 전에 진행한 Reservoir Computing 연구에서 사용한 ESN모델은 다양한 하이퍼 파리미터가 있었다. 그 중 Reservoir 안의 뉴런들 간의 연결 정도를조정하는 Connectivity(0.0~1.0) 파라미터가 있다. 이때 connectivity를 낮추면 뉴런들이 Fully Connected 되지 않고 일부 뉴런들만 연결이 되는데 이렇게 될 경우 뉴런들로 연결된 각 경로가 특정 Feature에 특화된 학습만을 진행할 수 있고 이후 가중치의 조합을 통해 더 풍부한 표현이 학습 가능하다고 한다. Drop out도 아마 비슷한 맥락이지 않을까 생각한다.[^5]
 
 Drop Out을 사용한 실험 결과이다. 
 
-![fig6-23](/assets/img/training_tech/fig6-23.png){: w="400", h="300"}
+![fig6-23](/assets/img/training_tech/fig6-23.png){: w="600", h="400"}
 
 drop out을 적용하면 훈련 데이터와 시험 데이터의 정확도 차이가 줄어드는 것을 확인할 수 있다. 
 
@@ -227,6 +226,7 @@ drop out을 적용하면 훈련 데이터와 시험 데이터의 정확도 차�
 
 
 [^1]: 본 포스팅은 사이토 고키의 "밑바닥부터 시작하는 딥러닝"과 수원대학교 한경훈 교수님의 강의를 참고했습니다. 
-[^2]: [오버피팅과 규제에 대한 블로그](https://nanunzoey.tistory.com/entry/%EA%B3%BC%EC%A0%81%ED%95%A9Overfitting%EA%B3%BC-%EA%B7%9C%EC%A0%9CRegularization)
-[^3]: [드롭아웃에 대한 블로그](https://brunch.co.kr/@donghoon0310/36)
-[^4]: [ESN에 대해 참조할만한 논문](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE06267613)
+[^2]: [배치 정규화에 대해 정리한 블로그](https://ffighting.net/deep-learning-paper-review/vision-model/batch-normalization/)
+[^3]: [오버피팅과 규제에 대한 블로그](https://nanunzoey.tistory.com/entry/%EA%B3%BC%EC%A0%81%ED%95%A9Overfitting%EA%B3%BC-%EA%B7%9C%EC%A0%9CRegularization)
+[^4]: [드롭아웃에 대한 블로그](https://brunch.co.kr/@donghoon0310/36)
+[^5]: [ESN에 대해 참조할만한 논문](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE06267613)
