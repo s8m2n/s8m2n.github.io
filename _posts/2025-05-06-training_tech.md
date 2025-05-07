@@ -1,5 +1,5 @@
 ---
-title: "학습 관련 기술들"
+title: "Training Techniques"
 date: 2025-05-06
 categories: [Study, Deep Learning]
 tags: [vanishing gradient, weight initialization, batch normalization, over fitting, under fitting, regularization, dropout, hyperparameter]  # TAG names should always be lowercase
@@ -19,7 +19,7 @@ math: true
 
 이번 포스팅에서는 학습의 효율과 정확도를 높일 수 있는 다양한 기법들에 대해 알아본다[^1]. 
 
-## Weight Initialization, 가중치 초기화화
+## Weight Initialization, 가중치 초기화
 
 * Optimization과 Gradient Descent를 참조
 
