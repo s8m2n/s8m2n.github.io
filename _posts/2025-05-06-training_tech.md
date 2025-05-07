@@ -208,7 +208,11 @@ drop out을 적용하면 훈련 데이터와 시험 데이터의 정확도 차�
 반면 **HyperParameter**는 사람이 직접 결정하는 값이다. 예를 들어 은닉층 뉴런의 개수, 층의 개수, Learning rate, 손실함수 종류, optimizer 종류 등이 있다. 좋은 Hyper Parameter 값을 찾아내기 위해서는 반복적인 실험을 통해 알아낼 수 밖에 없다. 
 
 ### Validation Data 
-그렇게 해서 얻은 Hyper Parameter 값이 좋은지 안 좋은지는 어떻게 평가할까?? 이를 위해서 **Validation Data**를 사용한다. 전에 Train 데이터와 Test 데이터를 각각 문제집과 수능에 비유했었다. Train 데이터로 모델을 학습하고, Test 데이터로 모델의 범용적인 성능을 확인할 수 있다. 이번에는 Validation 데이터를 추가적으로 도입해서 하이퍼파라미터를 검증해보자. 이때 주의할 점은 Validation 데이터는 Test 데이터와 구분되어야한다. 
+모델 학습의 목적은 Overfitting을 피하고 새로운 데이터에 대해서도 잘 대응하는 범용적인 모델을 만드는 것이다. 그렇다면 실제 데이터에 대한 모델의 성능을 어떻게 판단할까? 아래 예시를 보자. Train Loss는 일정 시점이 지난 이후에 비교적 일정한 값으로 수렴한다. 
+
+![fig0](assets/img/training_tech/fig0.jpg){: w="400", h="300"}
+
+이때 언제 실험을 중단하는 것이 좋을지는 Test 데이터를 확인하면 알 수 있다. 그림처럼 Test 데이터의 Loss가 낮은 곳에서 학습을 멈추는 것이 이상적일 것이다. 하지만 Test 데이터를 기준으로 모델을 선택하게 되면 모델이 Test 데이터에 과적합 되어 실제 데이터에는 잘 대응하지 못할 수 있는 문제가 있다. 이런 경우 **Validation Data**를 사용할 수 있다. Validation data는 훈련데이터의 일부를 떼어내서 만들 수 있다. 마치 본 시험(Test Data)을 보기 전 모의고사(Validation Data)를 보는 것과 같다. 또한 Validation Data를 통해 HyperParameter를 조정할 수 있다. 추가적으로 Validation Data는 모델 구조 선택에도 활용할 수 있다. Model1과 Model2가 있을 때 model1의 Train Loss는 더 낮을지 몰라도 model2의 Validation Loss가 더 낮을 수 있다. 이처럼 Validation loss가 낮은 모델을 선택하는 것이 실제 데이터의 적용에 더 좋은 성능을 낼 가능성이 있다. 
 
 > 예시로 Train 데이터를 "문제집", Validation 데이터를 "모의고사", Test 데이터를 "수능"이라고 생각할 수 있다. 문제집을 통해 전반적인 실력을 높이고, Validation 데이터를 통해 Hyper Parameter 값을 튜닝하고 마지막 Test 데이터로 시험을 친다.
 * Train Data : 매개 변수 학습
@@ -216,7 +220,7 @@ drop out을 적용하면 훈련 데이터와 시험 데이터의 정확도 차�
 * Test Data : 신경망의 범용적인 성능 평가 
 {: .prompt-tip}
 
-가장 간단하게 생각할 수 있는 데이터 분할 방법은 훈련데이터 일부를 Validation data로 분할하는 방법이다. 
+Validation Data는 어떻게 만들까? 가장 간단하게 생각할 수 있는 데이터 분할 방법은 훈련데이터 일부를 Validation data로 분할하는 방법이다. 
 
 ![fig2](/assets/img/training_tech/fig2.png){: w="400", h="300"}
 
