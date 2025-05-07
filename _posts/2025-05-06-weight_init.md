@@ -1,8 +1,8 @@
 ---
-title: "Weight Initialization"
+title: "학습 관련 기술들"
 date: 2025-05-06
 categories: [Study, Deep Learning]
-tags: [vanishing gradient, weight initialization]  # TAG names should always be lowercase
+tags: [vanishing gradient, weight initialization, batch normalization, over fitting, under fitting, dropout]  # TAG names should always be lowercase
 # description: 
 
 math: true
@@ -16,8 +16,9 @@ math: true
 #     return y.astype(np.int)
 # ```
 ---
+본 포스팅은 사이토 고키의 "밑바닥부터 시작하는 딥러닝"과 수원대학교 한경훈 교수님의 강의를 참조했습니다. 
 
-## Weight Initialization[^1]
+## Weight Initialization
 
 * Optimization과 Gradient Descent를 참조
 
