@@ -53,7 +53,9 @@ math: true
 
 ![fig5](/assets/img/3d_representation/fig5.png)
 
-Multiview 방식을 사용해서 전체적인 형상을 render 하지 않고 일부 segment들만을 render 하고 CNN을 통해 학습하게 되면 3D 구조의 Segmentation도 가능하다고 한다.\[Kalogerakis et al., 3D Shape Segmentation with Projective Convolutional Networks, CVPR 2017](https://arxiv.org/abs/1612.02808)
+Multiview 방식을 사용해서 전체적인 형상을 render 하지 않고 일부 segment들만을 render 하고 CNN을 통해 학습하게 되면 3D 구조의 Segmentation도 가능하다고 한다.
+
+[Kalogerakis et al., 3D Shape Segmentation with Projective Convolutional Networks, CVPR 2017](https://arxiv.org/abs/1612.02808)
 
 이 방식은 특히 색, 텍스쳐, 재료 등과 같이 시각적인 appearance 정보를 잘 표현할 수 있지만, 높은 정확도를 위해서는 많은 양의 데이터가 필요하고, 기하학적인 구조를 모두 포착하지 못할 수 있다는 단점이 있다. 
 
@@ -112,10 +114,11 @@ Voxel에서 Mesh로 변환하는 Marching Cube 알고리즘에 대해 알아보�
 
 $$
 f(x)<0: Inside 
+
 f(x)>0: Outside
 $$
 
-그러면 자연스럽게 이웃하는 **두 점의 부호가 바뀌는 점과 점을 연결하는 선분에는 물체의 표면과 교차하는 임의의 점이 있을 것이라고 생각할 수 있다. 그 점은 간단한 선형 보간법을 이용해서 계산할 수 있다. (물론 더 복잡한 함수를 사용할 수도 있다) 그리고 그렇게 구한 점들을 연결하면 우리는 물체의 표면에 근사하는 LINE을 그릴 수 있게 된다.** 
+그러면 자연스럽게 이웃하는 **두 점의 부호가 바뀌는 점과 점을 연결하는 선분에는 물체의 표면과 교차하는 임의의 점이 있을 것이라고 생각할 수 있다. 그 점은 간단한 선형 보간법을 이용해서 계산할 수 있다. (물론 더 복잡한 함수를 사용할 수도 있다) 그리고 그렇게 구한 점들을 연결하면 우리는 물체의 표면에 근사하는 line을 그릴 수 있게 된다.** 
 
 ![fig14](/assets/img/3d_representation/fig14.png){: w="500", h="400"}
 
@@ -123,7 +126,7 @@ $$
 
 ![fig15](/assets/img/3d_representation/fig15.png){: w="300", h="300"}
 
->하지만 중요한 점은 결국 Inside와 Outside를 구분짓는 선을 어떻게 그릴 수 있는지가 관건이라는 것이다. Rotation과 Inside/Outside 간의 Inversion을 통해 16가지 경우의 수를 같은 Intersection을 그리는 경우로 그룹화할 수 있다. 한 예시로 아래의 8가지 경우들은 모두 같은 경우로 간주할 수 있다.
+>이때 Inside와 Outside를 구분짓는 "선"을 어떻게 그릴 수 있는지가 관건이다. Rotation과 Inside/Outside 간의 Inversion을 통해 16가지 경우의 수를 같은 Intersection을 그리는 경우들끼리 그룹화할 수 있다. 한 예시로 아래의 8가지 경우들은 모두 같은 경우로 간주할 수 있다.
 >
 >![fig16](/assets/img/3d_representation/fig16.jpg){: w="400", h="300"}
 >
@@ -133,14 +136,14 @@ $$
 
 ![fig17](/assets/img/3d_representation/fig17.png){: w="400", h="200"}
 
-그런데 마지막 경우는 조합에 따라 Ambiguos한 두가지 경우가 생길 수 있다. 이런 경우
+그런데 마지막 경우는 조합에 따라 Ambiguous한 두가지 경우가 생길 수 있다. 이런 경우
 1. Cell을 더 작은 박스로 Subsampling 하거나
 2. 두 가지 경우 중 한가지를 확률적으로 선택해서
 해결할 수 있을 것이다.
 
 ![fig18](/assets/img/3d_representation/fig18.png){: w="500", h="300"}
 
-이처럼 각 Cell에 대한 Intersection Line들의 조합을 look up table에 저장하고 이를 활용해 Surface를 추출하는 것이 Marching Cube 알고리즘의 기본 아이디어이다. 3D 차원 상에서는 Cell이 Cube가 되고, line은 plane으로 되고 2차원의 경우와 같은 아이디어를 적용할 수 있다. 다만 3차원에서는 총 256가지, 그룹화하면 15가지의 Cases들이 존재할 것이다. Ambiguos 한 경우는 6가지로 Subsampling 혹은 하나를 고르는 방식을 적용한다. 
+이처럼 각 Cell에 대한 Intersection Line들의 조합을 look up table에 저장하고 이를 활용해 Surface를 추출하는 것이 Marching Cube 알고리즘의 기본 아이디어이다. 3D 차원 상에서는 Cell이 Cube가 되고, line은 plane으로 되고 2차원의 경우와 같은 아이디어를 적용할 수 있다. 다만 3차원에서는 총 256가지, 그룹화하면 15가지의 Cases들이 존재할 것이다. Ambiguous 한 경우는 6가지로 Subsampling 혹은 하나를 고르는 방식을 적용한다. 
 
 ![fig19](/assets/img/3d_representation/fig19.png){: w="500", h="500"}
 
@@ -160,8 +163,8 @@ Ambiguous Cases들로 인한 단점을 보완하고자, Cube 대신 사면체를
 
 **Tangent Plane**이란 간단히 말해서 3차원 물체 상의 임의의 점에 접하는 평면이다. 더 Formal한 정의는 아래와 같다.
 
-|Given a point 𝐩 = 𝑥, 𝑦, 𝑧 on a surface 𝑆, for all curves passing 𝐩 and lying entirely in 𝑆,\
-If the tangent lines to all such curves at 𝐩 lie on the same plane, this plane is called the tangent plane.
+| Given a point 𝐩 = 𝑥, 𝑦, 𝑧 on a surface 𝑆, for all curves passing 𝐩 and lying entirely in 𝑆,\
+| If the tangent lines to all such curves at 𝐩 lie on the same plane, this plane is called the tangent plane.
 
 그리고 **Surface Normal은 Tangent Plane에 수직인 Unit Vector를 의미한다.** Tangent Plane 상의 점 𝐩 를 지나는 임의의 두 독립적인 Vector의 외적을 통해 구할 수 있다. 
 
@@ -171,18 +174,18 @@ If the tangent lines to all such curves at 𝐩 lie on the same plane, this plan
 
 ![fig21](/assets/img/3d_representation/fig21.png){: w="500", h="300"}
 
-하지만 하나의 Point를 가지고 가정하는 "Local"한 Plane의 범위가 어디까지인지, Point 들에 어떤 가중치를 부여하는지에 따라 결과는 상이할 수 있다. 따라서 아래와 같이 Flat한 Plane이 아닌 다변수 함수로 평면을 정의하고 Neural Network를 도입하여 Point-Wise한 weight를 결정하여 훨씬 좋은 성능을 내는 Jet Fitting과 같은 방식이 연구되었다. 
+하나의 Point를 가지고 가정하는 "Local"한 Plane의 범위가 어디까지인지, Point 들에 어떤 가중치를 부여하는지에 따라 결과는 상이할 수 있다. 따라서 아래와 같이 Flat한 Plane이 아닌 다변수 함수로 평면을 정의하고 Neural Network를 도입하여 Point-Wise한 weight를 결정하여 훨씬 좋은 성능을 내는 Jet Fitting과 같은 방식이 연구되었다. 
 
 ![fig22](/assets/img/3d_representation/fig22.png){: w="500", h="300"}
 
 ### Signed Distance Function(SDF)
-3차원 공간의 Implicit 한 표현 방식의 한가지로 Occupancy Function이 있다. 안쪽이면 0, 바깥쪽이면 1로 정의하여 마치 Binary Classification 처럼 여겨질 수 있다. 이처럼 이진 분류가 아닌 **부호를 가지는 거리로 3차원 공간을 표현하는 Signed Distance Function을 알아보자.**
+3차원 공간의 Implicit 한 표현 방식의 한가지로 Occupancy Function이 있다. 안쪽이면 0, 바깥쪽이면 1로 정의하여 마치 Binary Classification 처럼 여겨질 수 있다. **Signed Distance Function은** Occupancy Function과 달리 이진 분류가 아닌 **부호를 가지는 거리로 3차원 공간을 표현하는 방식이다.**
 
 3D Volume $ \Omega $와, Boundary Surface $\partial  \Omega $가 주어질 때, Signed Distance Function은 다음과 같이 정의할 수 있다.
 
 ![fig23](/assets/img/3d_representation/fig23.png){: w="500", h="300"}
 
-즉 임의의 점 $\mathbf{x}$에 대해 점과 물체 표면사이의 거리를 나타내는 함수이다. 이때 점이 물체 밖에 있으면 (+)부호를, 물체 안에 있으면 (-)부호를 갖는다. 물체 표면 상에 있으면 그 점은 Surface로 SDF=0이 되는 Point 일 것이다. 
+즉 임의의 점 $\mathbf{x}$에 대해 점과 물체 표면사이의 거리를 나타내는 함수이다. 이때 점이 물체 밖에 있으면 (+)부호를, 물체 안에 있으면 (-)부호를 갖는다. 물체 표면 상에 있으면 그 점은 Surface로 $SDF = 0$이 되는 Point 일 것이다. 
 
 Point Cloud에서 SDF를 얻는 방식은 여러가지가 있다. 각 방식들을 간략하게 알아보자.
 * Simple Method: **Distance Between Point and tangent Plane**
