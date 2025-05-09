@@ -2,7 +2,7 @@
 title: "3D Representation"
 date: 2025-05-09
 categories: [Study, Machine Learning]
-tags: [3d represetation, voxel, multi-view image, point cloud, polygon mesh, implicit function]  # TAG names should always be lowercase
+tags: [3d represetation, voxel, multi-view image, point cloud, polygon mesh, implicit function, marching cube, signed distance function, poisson reconstruction]  # TAG names should always be lowercase
 # description: 
 
 math: true
@@ -17,7 +17,7 @@ math: true
 # ```
 ---
 
-본 포스팅은 KAIST 성민혁 교수님의 CS479강의를 참고했습니다[^1].
+본 포스팅은 KAIST 성민혁 교수님의 CS479, Machine Learning for 3D Data 강의 Ch2,3,4를 참고했습니다[^1].
 
 ## 3D Representations
 이번 강의에서는 크게 두 가지 Technology 에 대해  학습한다. 
@@ -55,7 +55,7 @@ math: true
 
 Multiview 방식을 사용해서 전체적인 형상을 render 하지 않고 일부 segment들만을 render 하고 CNN을 통해 학습하게 되면 3D 구조의 Segmentation도 가능하다고 한다.\[Kalogerakis et al., 3D Shape Segmentation with Projective Convolutional Networks, CVPR 2017](https://arxiv.org/abs/1612.02808)
 
-이 방식은 특히 색, 텍스쳐, 재료 등과 같이 시각적인 appearance 정보를 잘 표현할 수 있지만, 높은 정확도를 위해서는 많은 양의 데이터가 필요하거나 기하학적인 구조를 모두 포착하지 못할 수 있다는 단점이 있다. 
+이 방식은 특히 색, 텍스쳐, 재료 등과 같이 시각적인 appearance 정보를 잘 표현할 수 있지만, 높은 정확도를 위해서는 많은 양의 데이터가 필요하고, 기하학적인 구조를 모두 포착하지 못할 수 있다는 단점이 있다. 
 
 ### Point Cloud 
 다른 방식으로는 3D data를 독립적인 3차원 공간상의 점으로 표현하는 방식이다. 여기서 좌표 정보에 색, normal vector와 같은 정보들이 추가될 수 있다. 
@@ -64,7 +64,7 @@ Multiview 방식을 사용해서 전체적인 형상을 render 하지 않고 일
 
 현대에서 사용하는 대부분의 3D scanning 장비들의 출력결과는 point cloud 방식을 사용하고 이후 추가적인 조작또한 쉽기 때문에 Pyhsical simulation 분야에서도 널리 사용되는 표현법이다. 
 
-하지만 이 방식은 단순한 점으로 표현을 하는 방식으로 Grid Sturcture가 없고 CNN과 같은 Convolutional 네트워크에 적용이 힘들다. 따라서 이를 해결하기 위해 아래와 같은 **Point Net[^2]**이라는 새로운 아키텍쳐가 제안된다.
+하지만 이 방식은 단순한 점으로 표현을 하는 방식으로 Surface Structure가 없고 CNN과 같은 Convolutional 네트워크에 적용이 힘들다. 따라서 이를 해결하기 위해 아래와 같은 **Point Net[^2]**이라는 새로운 아키텍쳐가 제안된다.
 
 ![fig7](/assets/img/3d_representation/fig7.png)
 
@@ -80,7 +80,7 @@ polygon mesh는 **Vertices, Edges, Faces**로 구성 되고 모든 Face가 삼�
 
 ![fig9](/assets/img/3d_representation/fig9.png){: w="400", h="300"}
 
-polygon mesh는 여러 Application에 적용가능하다. 하지만 일정하지 않은 구조로 인해 Convolutional network에는 적용할 수 없다는 한계가 있다. 따라서 Regularity를 위해 CNN의 pooling Layer와 edge Contraction 이라는 방법들을 도입하는 등 다양한 시도들이 존재한다.[^3]
+polygon mesh는 여러 Application에 적용가능하다. 하지만 일정하지 않은 구조로 인해 유효한 mesh를 만들기 어렵다는 한계가 있다. 따라서 Regularity를 위해 CNN의 pooling Layer와 edge Contraction 이라는 방법들을 도입하는 등 다양한 시도들이 존재한다.[^3]
 또한 유효한 Mesh를 만들기 어렵다는 한계도 있다. 순차적으로 모서리와 면을 생성해 Mesh를 자동적으로 만드는 Mesh Generation이라는 모델이 개발되었지만 약간의 오차로도 매우 큰 오차를 낼 수 있다는 단점이 있다.
 
 ![fig10](/assets/img/3d_representation/fig10.png){: w="500", h="400"}
@@ -94,12 +94,133 @@ Explicit representation과 달리, 3차원 공간 자체를 연속적인 함수�
 
 ![fig12](/assets/img/3d_representation/fig12.png){: w="500", h="400"}
 
+Implicit Function은 좌표값을 입력으로 받고, Signed Distance 혹은 Occupancy에 대한 정보를 출력하는 함수이다. 
+
 이처럼 3D data를 표현하는 Representation은 여러가지가 있다. Implicit 함수를 계산하면 Voxel로, Mesh를 샘플링하면 Point cloud로, Mesh를 Rendering 하면 Multi-view 로 각 표현 방식들간 전환이 가능하다.
 
 ![fig13](/assets/img/3d_representation/fig13.png){: w="500", h="400"}
 
 **만약 Voxel에서 mesh로, Point Cloud에서 Implicit Function으로도 변환**이 가능하다면 모든 기법들을 자유롭게 변환하며 3차원 데이터를 표현할 수 있을 것이다. 
 
+## Voxels to Mesh 
+### Marching Cubes 
+Voxel에서 Mesh로 변환하는 Marching Cube 알고리즘에 대해 알아보자. 이 알고리즘은 1987년 발표된 알고리즘으로 Occupancy Grid가 주어질때, 물체의 표면을 근사하는 Triangle Mesh를 만드는 것이 목표다[^4]
+
+{% include embed/youtube.html id='M3iI2l0ltbE' %}
+
+이해를 위해 간단한 2차원 평면을 생각해보자. 2차원 평면은 Grid로 이루어져있고 각 점들은 $f(x)$라는 함수에 의해서 "Inside" 혹은 "Outside"로 정의된다. 특정한 모양을 가진 물체가 그 평면 상에 존재한다고 할때, 물체 안에 존재하는 점들은 (-), 밖에 존재하는 점들은 (+)의 부호를 갖게된다. 
+
+$$
+f(x)<0: Inside 
+f(x)>0: Outside
+$$
+
+그러면 자연스럽게 이웃하는 **두 점의 부호가 바뀌는 점과 점을 연결하는 선분에는 물체의 표면과 교차하는 임의의 점이 있을 것이라고 생각할 수 있다. 그 점은 간단한 선형 보간법을 이용해서 계산할 수 있다. (물론 더 복잡한 함수를 사용할 수도 있다) 그리고 그렇게 구한 점들을 연결하면 우리는 물체의 표면에 근사하는 LINE을 그릴 수 있게 된다.** 
+
+![fig14](/assets/img/3d_representation/fig14.png){: w="500", h="400"}
+
+이때 4개의 점으로 이루어지는 각 Cell들을 개별적으로 다룸으로써 연결 가능한 모든 조합들을 간단하고 효율적으로 계산할 수 있다. 특히 각 Cell들을 병렬적으로 처리하여 GPU의 Parallelize 특징을 활용할 수 있다. 한 Cell의 각 꼭짓점들은 Inside 또는 Outside가 될 수 있으므로 아래와 같이 총 $2^4=16$가지의 경우의 수를 갖는다. 
+
+![fig15](/assets/img/3d_representation/fig15.png){: w="300", h="300"}
+
+>하지만 중요한 점은 결국 Inside와 Outside를 구분짓는 선을 어떻게 그릴 수 있는지가 관건이라는 것이다. Rotation과 Inside/Outside 간의 Inversion을 통해 16가지 경우의 수를 같은 Intersection을 그리는 경우로 그룹화할 수 있다. 한 예시로 아래의 8가지 경우들은 모두 같은 경우로 간주할 수 있다.
+>
+>![fig16](/assets/img/3d_representation/fig16.jpg){: w="400", h="300"}
+>
+{: .prompt-tip}
+
+결국 16가지의 경우들은 아래와 같이 총 4개의 그룹들로 정리할 수 있다. 따라서 우리는 이 4가지 경우들에 대한 **Look Up Table**을 만들고 그 Table을 참고해서 가능한 모든 조합을 생각할 수 있게된다. 
+
+![fig17](/assets/img/3d_representation/fig17.png){: w="400", h="200"}
+
+그런데 마지막 경우는 조합에 따라 Ambiguos한 두가지 경우가 생길 수 있다. 이런 경우
+1. Cell을 더 작은 박스로 Subsampling 하거나
+2. 두 가지 경우 중 한가지를 확률적으로 선택해서
+해결할 수 있을 것이다.
+
+![fig18](/assets/img/3d_representation/fig18.png){: w="500", h="300"}
+
+이처럼 각 Cell에 대한 Intersection Line들의 조합을 look up table에 저장하고 이를 활용해 Surface를 추출하는 것이 Marching Cube 알고리즘의 기본 아이디어이다. 3D 차원 상에서는 Cell이 Cube가 되고, line은 plane으로 되고 2차원의 경우와 같은 아이디어를 적용할 수 있다. 다만 3차원에서는 총 256가지, 그룹화하면 15가지의 Cases들이 존재할 것이다. Ambiguos 한 경우는 6가지로 Subsampling 혹은 하나를 고르는 방식을 적용한다. 
+
+![fig19](/assets/img/3d_representation/fig19.png){: w="500", h="500"}
+
+Marching Cube 알고리즘의 **장점**은 다양한 분야에 적용가능하고 병렬적으로 처리가능하여 매우 빠르며, 쉽고 간단하게 적용할 수 있다. 또한 Voxel Grid만 입력으로 넣어주면 되기 때문에 Parameter조정으로 인한 부담이 낮다. 
+
+반면 Sharp한 Edge는 잘 표현하지 못하고, 특별한 Cases의 경우, Look-up-table의 크기가 커질수 있다는 단점이 있다. 또한 초기모델은 정확한 기하학적 형상을 보장하지는 않는다. 
+
+Ambiguous Cases들로 인한 단점을 보완하고자, Cube 대신 사면체를 사용한 **Marching Tetrahedra**알고리즘이 연구되기도 했다. 이 경우 4개의 모서리를 가지므로 총 16가지의 경우의 수들이 있고 그룹화하면 3가지의 그룹으로 묶을 수 있다. 특히 Ambiguous한 경우가 없다는 장점이 있다. Marching Tetrahedra를 확장 적용한 연구로 DMTet와 같은 논문이 발표되었다. [^5]
+
+## Point Cloud to Implicit Function
+다음은 Point Cloud의 정보에서 Implicit Function을 얻는 방법을 알아보자. Voxel-to-mesh, Point Cloud-to-Implicit Function과 같은 변환 방법들을 통해 여러 3D Data Representation을 자유롭게 변환할 수 있게 된다. 
+
+![fig13](/assets/img/3d_representation/fig13.png){: w="500", h="400"}
+
+### Surface Normal Estimation
+이번에는 Point Cloud에서 Implicit Function을 얻는 방법을 알아보자. 그러기 위해서는 Surface Normal에 대한 정보가 우선적으로 필요하다. **Surface Normals은 Recovering Surface와 Volume Data에 필수적인 정보이다. 
+
+**Tangent Plane**이란 간단히 말해서 3차원 물체 상의 임의의 점에 접하는 평면이다. 더 Formal한 정의는 아래와 같다.
+
+|Given a point 𝐩 = 𝑥, 𝑦, 𝑧 on a surface 𝑆, for all curves passing 𝐩 and lying entirely in 𝑆,\
+If the tangent lines to all such curves at 𝐩 lie on the same plane, this plane is called the tangent plane.
+
+그리고 **Surface Normal은 Tangent Plane에 수직인 Unit Vector를 의미한다.** Tangent Plane 상의 점 𝐩 를 지나는 임의의 두 독립적인 Vector의 외적을 통해 구할 수 있다. 
+
+![fig20](/assets/img/3d_representation/fig20.png){: w="400", h="400"}
+
+하지만 Surface가 없고 Point 만 있는 Point Cloud에서 Surface Normal 정보는 어떻게 얻을 수 있을까?? 간단한 방식으로, Point cloud상의 임의의 점 P에 대해서 Local neighborhood와 가장 잘 맞는 Tangent Plane을 Approximate 할 수 있다. 다시 말해, Point 주변의 Local한 Flat Plane을 가정한다. 이때 여러 Point 들 간의 정렬을 맞추기 위해 Surface Normal Vector간의 정렬을 맞추는 추가작업이 필요하다. 
+
+![fig21](/assets/img/3d_representation/fig21.png){: w="500", h="300"}
+
+하지만 하나의 Point를 가지고 가정하는 "Local"한 Plane의 범위가 어디까지인지, Point 들에 어떤 가중치를 부여하는지에 따라 결과는 상이할 수 있다. 따라서 아래와 같이 Flat한 Plane이 아닌 다변수 함수로 평면을 정의하고 Neural Network를 도입하여 Point-Wise한 weight를 결정하여 훨씬 좋은 성능을 내는 Jet Fitting과 같은 방식이 연구되었다. 
+
+![fig22](/assets/img/3d_representation/fig22.png){: w="500", h="300"}
+
+### Signed Distance Function(SDF)
+3차원 공간의 Implicit 한 표현 방식의 한가지로 Occupancy Function이 있다. 안쪽이면 0, 바깥쪽이면 1로 정의하여 마치 Binary Classification 처럼 여겨질 수 있다. 이처럼 이진 분류가 아닌 **부호를 가지는 거리로 3차원 공간을 표현하는 Signed Distance Function을 알아보자.**
+
+3D Volume $ \Omega $와, Boundary Surface $\partial  \Omega $가 주어질 때, Signed Distance Function은 다음과 같이 정의할 수 있다.
+
+![fig23](/assets/img/3d_representation/fig23.png){: w="500", h="300"}
+
+즉 임의의 점 $\mathbf{x}$에 대해 점과 물체 표면사이의 거리를 나타내는 함수이다. 이때 점이 물체 밖에 있으면 (+)부호를, 물체 안에 있으면 (-)부호를 갖는다. 물체 표면 상에 있으면 그 점은 Surface로 SDF=0이 되는 Point 일 것이다. 
+
+Point Cloud에서 SDF를 얻는 방식은 여러가지가 있다. 각 방식들을 간략하게 알아보자.
+* Simple Method: **Distance Between Point and tangent Plane**
+* Local Kernel Regression: **Moving Least Squares**, Radial Basis Function etc.
+* Global Reconstruction: **Poisson Surface Reconstruction**
+
+### Simple Method
+가장 간단한 방법으로는, 공간상의 임의의 점 $\mathbf{x}$와 가장 가까운 Point Cloud 상의 점 $\mathbf{p}$에 대해 점 $\mathbf{p}$로 만들수 있는 Tangent Plane과 $\mathbf{x}$의 Signed Distance 를 구하는 방법이다. 
+
+![fig24](/assets/img/3d_representation/fig24.png){: w="500", h="300"}
+
+하지만 이 방법은 점 $\mathbf{x}$와 가까운 하나의 점만을 사용하기 때문에 정확도가 낮을 수 있다. 
+
+### Moving Least Squares
+Simple Method의 한계를 극복하고자, **Moving Least Sqaures**방법은 Local Kernel Regression에 기반하여 여러 점들의 Wieghted Sum을 사용하는 방법이다.
+
+{% include embed/youtube.html id='S0ptaAXNxBU' %}
+
+즉 물체의 표면에 해당하는 샘플 Point $\mathbf{p_i}, where f(\mathbf{p_i})=0$들이 주어질 때, $f(x)$에 가장 근사하는 Implicit Function을 찾는 것이 목표이다. 
+
+점 $\mathbf{p_i}$와 가까운 공간 상의 점 $\mathbf{x}$를 이용하여 Tayler Series로 전개하면 아래와 같다. 우리가 구하고자 하는 것은 아래 식을 만족하는 $f(x)$를 찾는 것이다. 
+
+![fig25](/assets/img/3d_representation/fig25.png){: w="500", h="300"}
+
+또한, 점 $\mathbf{p_i}$에서의 Gradient는 점 $\mathbf{p_i}$에서의 Surface Normal과 같다. 따라서 우리가 구하고자 하는 근사 함수 $f(x)$는 아래 식을 통해 정리할 수 있다. 즉 우리의 목표는 **Weighted Least Square Problem을 푸는 것**이다. 
+
+![fig26](/assets/img/3d_representation/fig26.jpg){: w="400", h="300"}
+
+이때 Weight는 다양한 방법으로 정할 수 있는데, 아래와 같은 방식으로 정의한다면, Point 와 Surface 간 거리가 클수록 더 작은 가중치 값을 갖게 된다. 
+
+![fig27](/assets/img/3d_representation/fig27.png){: w="500", h="400"}
+
+Moving Least Square 알고리즘은 빠르고 간단하게 적용할수 있지만 Local region에 대해 근사한 값만을 사용하고,  Weight Function에 민감하다는 단점이 있다.
+
+
 [^1]: [CS479 Machine Learning for 3D Data](https://www.youtube.com/watch?v=933wv8i3QKU)
 [^2]: [Point Net 정리 블로그](https://mr-waguwagu.tistory.com/40)
 [^3]: [MeshCNN 정리 블로그](https://m.blog.naver.com/dmsquf3015/221788095718)
+[^4]: [Marching Cube 알고리즘 정리 블로그](https://xoft.tistory.com/47)
+[^5]: [DMTet 정리 블로그](https://velog.io/@cjkangme/TIL-DMTet-Deep-Marching-Tetrahedra)
+
