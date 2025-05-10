@@ -218,10 +218,95 @@ Simple Method의 한계를 극복하고자, **Moving Least Sqaures**방법은 Lo
 
 Moving Least Square 알고리즘은 빠르고 간단하게 적용할수 있지만 Local region에 대해 근사한 값만을 사용하고,  Weight Function에 민감하다는 단점이 있다.
 
+### Poisson Surface Reconstruction
+앞서 점 $\mathbf{p_i}$에서 Implicit Function의 Gradient는 그 점에서의 Surface Normal 과 같다는 것을 확인했다. 
+
+![fig28](/assets/img/3d_representation/fig28.png){: w="500", h="400"}
+
+$$
+\bigtriangledown f(\mathbf{p_i})=\mathbf{n_i}
+$$
+
+그렇다면 Surface Normal 의 정보를 가지고 원함수를 복원할 수 있지 않을까 하는 것이 Poisson Reconstruction의 아이디어이다. 즉, 아래 식처럼 $\bigtriangledown f$을 적분하여 $f$를 구하는 것이 목표이다. 
+
+![fig29](/assets/img/3d_representation/fig29.png){: w="500", h="400"}
+
+하지만 이 방식으로 원함수를 복원하기 위해서 가능한 모든 $\bigtriangledown f=\mathbf{V}$가 적분가능해야 한다. 즉 Vector Field $\mathbf{V}$는 아래 조건들을 모두 만족하는 Conservative 한 특징을 가져야하지만 현실적으로 그러기란 쉽지 않다.[^6]
+
+| # | 보존 벡터장 필요충분조건                    | 수식·표현                                                                                                   |
+| - | ---------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 1 | 어떤 함수 $f$ 의 **그래디언트**일 때 | $\displaystyle \mathbf{V} = \nabla f$                                                                   |
+| 2 | **컬(curl)** 이 0일 때           | $\displaystyle \nabla \times \mathbf{V} = \mathbf{0}$                                                   |
+| 3 | **선적분이 경로와 무관**할 때           | $\displaystyle \int_{P_1} \mathbf{V}\!\cdot d\mathbf{r} \;=\; \int_{P_2} \mathbf{V}\!\cdot d\mathbf{r}$ |
+
+따라서 우리는 주어진 Input에 대해서 $\bigtriangledown f(x)$와의 차이가 가장 작도록, $\hat{\mathbf{f}}$를 최소화하는 Mean Squared Error 문제를 푸는 것으로 바꿔 생각하도록 하자.
+
+![fig30](/assets/img/3d_representation/fig30.png){: w="500", h="400"}
+
+1차원의 경우 아래와 같은 함수를 최소화하는 문제로 생각할 수 있다.
+
+![fig32](/assets/img/3d_representation/fig32.png){: w="500", h="400"}
+
+#### Euler Lagrange Formulation and Poisson Equation
+Euler Lagrange Equation은 간단히 말해, $\int_{\Omega }^{}L(x,f(x), f'(x))dx$ form의 Stationary Point(Min, Max, etc.)들은 $\frac{\partial L}{\partial f}-\frac{d}{dx}\frac{\partial L}{\partial f'}=0$ 과 같은 PDE의 해로 구할 수 있다는 정리이다[^7]. 
+
+{% include embed/youtube.html id='OcRB6omfy9c' %}
+
+1차원에서는 $L=(f'(x)-g(x))^2$이므로 아래와 같이 정리할 수 있다. 즉 Minimizing Mean Suared Error 문제는 $g$에 대한 정보가 주어졌을 때, $f''$가 $g'$와 같아지도록 하는 점들을 찾는 문제로 바꿀 수 있다. 
+ㅁ
+![fig31](/assets/img/3d_representation/fig31.png){: w="500", h="400"}
+
+더 높은 차원에서는 이 식을 아래와 같이 바꿀 수 있고, 이 식을 **Poisson Equation**이라고 부른다. $\bigtriangledown V$는 $V$의 Divergence이고, $\bigtriangleup f$는 함수 $f$의 Laplacian으로 두 번 Divergence를 취한 연산자이다.
+
+![fig33](/assets/img/3d_representation/fig33.png){: w="500", h="400"}
+
+즉 최종적으로  $\bigtriangleup f=\textit{u}$를 푸는 것이 목적이다. 하지만 Point들은 Discrete 한 점들인데 어떻게 Gradient 를 구할 수 있을까?
+
+각 점들이 등간격 $x_{i+1}-x_{i}=h$로 배치되어 있다고 가정한다면 함수 $f$는 마치 Vector 처럼 표현할 수 있다, $\mathbf{f}=[f_1, f_2, f_3, ...,f_n]^T$ . 따라서 $x_i$에서의 Gradient는 다음과 같이 근사할 수 있다. 
+
+![fig34](/assets/img/3d_representation/fig34.png){: w="500", h="400"}
+
+모든 미분을 Matrix 형태로 바꿔서 표현하면 $A\mathbf{f}=\mathbf{g}$이 되고 **$A$는 미분 연산자 행렬**로 표현할 수 있다. 
+
+![fig35](/assets/img/3d_representation/fig35.png){: w="500", h="400"}
+
+![fig36](/assets/img/3d_representation/fig36.png){: w="500", h="400"}
+
+$x_i$에서의 Laplacian 연산도 마찬가지로 아래와 같이 근사하고, Discrete한 함수의 matrix 연산으로 표현할 수 있다. 
+
+![fig37](/assets/img/3d_representation/fig37.png){: w="500", h="400"}
+
+![fig38](/assets/img/3d_representation/fig38.png){: w="500", h="400"}
+
+정리하자면 $g$가 주어질 때, $f$에 대한 Poisson Equation $\frac{d^2f}{dx^2}=\frac{dg}{dx}$을 푸는 것은 Discrete 한 경우, $\mathbf{f}$에 대한 $L\mathbf{f}=A\mathbf{g}$을 푸는 것이다. 앞서 확인했듯, $L$, $A$, $\mathbf{g}$은 주어진다. 이 방정식에 대한 solution은 unique하지 않기 때문에 $f(p_i)=0$인 추가정보를 사용하여 더 정확한 Solution을 얻을 수 있다.
+
+![fig39](/assets/img/3d_representation/fig39.png)
+_Regularization Term을 추가한 Screened Poisson Surface Reconstruction_
+
+Poisson Reconstruction 기법을 더 발전 시켜 Spectral Method 를 이용해 Poisson Equation을 푸는 **Shape-as-Points**[^8]와 Neural Network를 이용해 Normal 정보 없이 Point Cloud에서 Implicit 표현으로 변환하는 **Points2Surf**와 같은 연구들이 계속해서 발전되고 있다.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [^1]: [CS479 Machine Learning for 3D Data](https://www.youtube.com/watch?v=933wv8i3QKU)
 [^2]: [Point Net 정리 블로그](https://mr-waguwagu.tistory.com/40)
 [^3]: [MeshCNN 정리 블로그](https://m.blog.naver.com/dmsquf3015/221788095718)
 [^4]: [Marching Cube 알고리즘 정리 블로그](https://xoft.tistory.com/47)
 [^5]: [DMTet 정리 블로그](https://velog.io/@cjkangme/TIL-DMTet-Deep-Marching-Tetrahedra)
+[^6]: [Conservative Vector Field와 적분](https://gosamy.tistory.com/239)
+[^7]: [오일러 라그랑주 방정식](https://wikidocs.net/164904)
+[^8]: [Shape-as-Points 정리 블로그](https://velog.io/@hbcho/Shape-As-Points-SAP-%EB%A6%AC%EB%B7%B0)
+
+
+
 
