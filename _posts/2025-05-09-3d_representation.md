@@ -69,7 +69,7 @@ Point Cloud는 흔하게 사용하는 3D 표현법중 하나로 3D data를 독�
 
 ![fig7](/assets/img/3d_representation/fig7.png)
 
-PointNet은 Point Cloud를 Neural Network에 적용하기 위한 연구이.\
+PointNet은 Point Cloud를 Neural Network에 적용하기 위한 연구이다.\
 비교적 간단하고 빠르게 적용할 수 있다는 장점이 있지만 3차원 구조의 Surface 정보는 알지 못하고 이후 추가적인 변환 기법이 필요하다고 한다. 또한 높은 정확도를 위해서는 많은 수의 Point들을 필요로 한다. 
 
 ### Polygon Mesh 
